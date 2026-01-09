@@ -12,6 +12,8 @@ export const metadata: Metadata = {
   description:
     "Soluciones integrales de seguros: PPR para tu retiro, Seguros de Vida y GMM, Seguros de Auto. Asegura tu futuro con nosotros.",
   generator: "Ts, Nextjs,",
+}; // <--- ¡AQUÍ ESTABA EL ERROR! Faltaba cerrar esto.
+
 export default function RootLayout({
   children,
 }: Readonly<{
