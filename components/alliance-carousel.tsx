@@ -5,25 +5,26 @@ import { useState } from "react"
 export function AllianceCarousel() {
   const [stopScroll, setStopScroll] = useState(false)
 
+  // AQUÍ ESTÁ LA CORRECCIÓN: Rutas exactas a tus archivos numerados
   const images = [
     {
-      src: "/images/whatsapp-20image-202026-01-09-20at-2012.jpeg",
+      src: "/images/1.jpeg",
       alt: "OptiMaxx plus - Plan personal de retiro con Allianz",
     },
     {
-      src: "/images/whatsapp-20image-202026-01-09-20at-2012.jpeg",
+      src: "/images/2.jpeg",
       alt: "Allianz y Grupo Neuss - Distribuidor Autorizado",
     },
     {
-      src: "/images/whatsapp-20image-202026-01-09-20at-2012.jpeg",
+      src: "/images/3.jpeg",
       alt: "Beneficios fiscales para incentivar el ahorro para el retiro",
     },
     {
-      src: "/images/whatsapp-20image-202026-01-09-20at-2012.jpeg",
+      src: "/images/4.jpeg",
       alt: "OptiMaxx plus con beneficios fiscales para la jubilación",
     },
     {
-      src: "/images/whatsapp-20image-202026-01-09-20at-2012.jpeg",
+      src: "/images/5.jpeg",
       alt: "OptiMaxx plus - ¿Cómo quieres disfrutar tu retiro?",
     },
   ]
@@ -59,13 +60,15 @@ export function AllianceCarousel() {
           }}
         >
           <div className="flex">
+            {/* Duplicamos el array para el efecto infinito */}
             {[...images, ...images].map((image, index) => (
               <div
                 key={index}
                 className="w-64 md:w-80 mx-4 h-[28rem] md:h-[32rem] relative group hover:scale-[0.98] transition-all duration-300"
               >
                 <img
-                  src={image.src || "/placeholder.svg"}
+                  // Usamos image.src directo porque ya sabemos que existe
+                  src={image.src}
                   alt={image.alt}
                   className="w-full h-full object-cover rounded-xl shadow-lg"
                 />
