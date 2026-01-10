@@ -8,8 +8,18 @@ import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area, Line } from "recharts"
-import { Calculator, TrendingUp } from "lucide-react"
+import { Calculator, TrendingUp, Send, CheckCircle2 } from "lucide-react"
 import { AllianceCarousel } from "@/components/alliance-carousel"
+import { createClient } from "@/lib/supabase/client"
+import { useToast } from "@/hooks/use-toast"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
 interface ProjectionRow {
   year: number
@@ -26,7 +36,13 @@ export function PPRSimulator() {
   const [initialAmount, setInitialAmount] = useState("0")
   const [showResults, setShowResults] = useState(false)
 
-  const annualInterestRate = 0.13 // 13% anual promedio
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [clientInfo, setClientInfo] = useState({ name: "", email: "", phone: "" })
+  const [isSending, setIsSending] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
+  const { toast } = useToast()
+
+  const annualInterestRate = 0.13
 
   const projectionData = useMemo(() => {
     if (!showResults) return []
@@ -43,13 +59,9 @@ export function PPRSimulator() {
     let totalAportaciones = initial
 
     for (let i = 1; i <= years; i++) {
-      // Aportaciones anuales (12 meses)
       const aportacionAnual = monthly * 12
       totalAportaciones += aportacionAnual
-
-      // Aplicar interés compuesto
       saldo = (saldo + aportacionAnual) * (1 + annualInterestRate)
-
       const rendimientos = saldo - totalAportaciones
 
       data.push({
@@ -66,6 +78,67 @@ export function PPRSimulator() {
 
   const handleCalculate = () => {
     setShowResults(true)
+  }
+
+  const handleSendSimulation = async () => {
+    if (!clientInfo.name || !clientInfo.email || !clientInfo.phone) {
+      toast({
+        title: "Campos incompletos",
+        description: "Por favor completa todos los campos.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    setIsSending(true)
+    const finalProjection = projectionData[projectionData.length - 1]
+
+    const supabase = createClient()
+
+    try {
+      const { error } = await supabase.from("clientes_potenciales").insert({
+        nombre: clientInfo.name,
+        telefono: clientInfo.phone,
+        correo: clientInfo.email,
+        mensaje: `Simulación PPR: ${clientInfo.name} está interesado en un plan de retiro`,
+        servicio_interes: "ppr",
+        tiene_simulacion: true,
+        monto_mensual: Number.parseFloat(monthlyAmount),
+        edad_actual: Number.parseInt(currentAge),
+        edad_retiro: Number.parseInt(retirementAge),
+        monto_inicial: Number.parseFloat(initialAmount),
+        proyeccion_final: finalProjection.saldoTotal,
+        total_aportaciones: finalProjection.aportaciones,
+        total_rendimientos: finalProjection.rendimientos,
+        rendimiento_anual: 13.0,
+        fuente: "simulador_ppr",
+      })
+
+      if (error) throw error
+
+      setIsSuccess(true)
+      toast({
+        title: "¡Simulación enviada exitosamente!",
+        description:
+          "Tu proyección ha sido guardada. Un asesor especializado revisará tu simulación y se comunicará contigo pronto para ofrecerte la mejor propuesta personalizada.",
+        duration: 6000,
+      })
+
+      setTimeout(() => {
+        setIsDialogOpen(false)
+        setIsSuccess(false)
+        setClientInfo({ name: "", email: "", phone: "" })
+      }, 2000)
+    } catch (error) {
+      console.error("[] Error saving simulation to Supabase:", error)
+      toast({
+        title: "Error al enviar la simulación",
+        description: "Por favor intenta nuevamente o contáctanos por WhatsApp al 55 5951 5885.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsSending(false)
+    }
   }
 
   const formatCurrency = (value: number) => {
@@ -308,7 +381,7 @@ export function PPRSimulator() {
                 </CardContent>
               </Card>
 
-              <div className="text-center">
+              <div className="text-center flex gap-4 justify-center flex-wrap">
                 <Button
                   size="lg"
                   onClick={() => {
@@ -318,6 +391,66 @@ export function PPRSimulator() {
                 >
                   Quiero Empezar Mi Plan de Retiro
                 </Button>
+
+                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button size="lg" variant="outline">
+                      <Send className="w-4 h-4 mr-2" />
+                      Enviar Simulación a mi Asesor
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Enviar Simulación</DialogTitle>
+                      <DialogDescription>
+                        Proporciona tus datos para que un asesor revise tu simulación y te contacte con una propuesta
+                        personalizada.
+                      </DialogDescription>
+                    </DialogHeader>
+                    {isSuccess ? (
+                      <div className="py-8 text-center">
+                        <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />
+                        <h3 className="text-xl font-bold text-foreground mb-2">¡Simulación Guardada!</h3>
+                        <p className="text-sm text-muted-foreground">Tu asesor la revisará pronto.</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-4 py-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="client-name">Nombre Completo *</Label>
+                          <Input
+                            id="client-name"
+                            placeholder="Juan Pérez"
+                            value={clientInfo.name}
+                            onChange={(e) => setClientInfo({ ...clientInfo, name: e.target.value })}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="client-email">Correo Electrónico *</Label>
+                          <Input
+                            id="client-email"
+                            type="email"
+                            placeholder="juan@ejemplo.com"
+                            value={clientInfo.email}
+                            onChange={(e) => setClientInfo({ ...clientInfo, email: e.target.value })}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="client-phone">Teléfono *</Label>
+                          <Input
+                            id="client-phone"
+                            type="tel"
+                            placeholder="55 1234 5678"
+                            value={clientInfo.phone}
+                            onChange={(e) => setClientInfo({ ...clientInfo, phone: e.target.value })}
+                          />
+                        </div>
+                        <Button onClick={handleSendSimulation} className="w-full" disabled={isSending}>
+                          {isSending ? "Enviando..." : "Enviar Simulación"}
+                        </Button>
+                      </div>
+                    )}
+                  </DialogContent>
+                </Dialog>
               </div>
             </>
           )}

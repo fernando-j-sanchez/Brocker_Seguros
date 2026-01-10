@@ -9,7 +9,9 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Mail, Phone, MapPin, Send } from "lucide-react"
+import { Mail, Phone, MapPin, Send, CheckCircle2 } from "lucide-react"
+import { createClient } from "@/lib/supabase/client"
+import { useToast } from "@/hooks/use-toast"
 
 export function ContactForm() {
   const [formData, setFormData] = useState({
@@ -19,16 +21,50 @@ export function ContactForm() {
     service: "",
     message: "",
   })
-  const [submitted, setSubmitted] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
+  const { toast } = useToast()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Mock submission
-    setSubmitted(true)
-    setTimeout(() => {
-      setSubmitted(false)
+    setIsLoading(true)
+
+    const supabase = createClient()
+
+    try {
+      const { error } = await supabase.from("clientes_potenciales").insert({
+        nombre: formData.name,
+        telefono: formData.phone,
+        correo: formData.email,
+        mensaje: formData.message || null,
+        servicio_interes: formData.service,
+        tiene_simulacion: false,
+        fuente: "formulario_contacto",
+      })
+
+      if (error) throw error
+
+      setIsSuccess(true)
+      toast({
+        title: "¡Solicitud recibida exitosamente!",
+        description:
+          "Nuestros asesores revisarán tu información y se pondrán en contacto contigo muy pronto. ¡Gracias por tu confianza!",
+        duration: 6000,
+      })
       setFormData({ name: "", email: "", phone: "", service: "", message: "" })
-    }, 3000)
+
+      setTimeout(() => setIsSuccess(false), 3000)
+    } catch (error) {
+      console.error("[] Error saving to Supabase:", error)
+      toast({
+        title: "Error al enviar la solicitud",
+        description: "Por favor intenta nuevamente o contáctanos directamente por WhatsApp al 55 5951 5885.",
+        variant: "destructive",
+        duration: 5000,
+      })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -50,84 +86,96 @@ export function ContactForm() {
                   <CardDescription>Completa el formulario y un asesor se pondrá en contacto contigo</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {isSuccess ? (
+                    <div className="py-12 text-center">
+                      <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />
+                      <h3 className="text-2xl font-bold text-foreground mb-2">¡Solicitud Enviada!</h3>
+                      <p className="text-muted-foreground max-w-md mx-auto">
+                        Tu información ha sido recibida exitosamente. Nuestros asesores la revisarán y se comunicarán
+                        contigo a la brevedad para ofrecerte la mejor atención personalizada.
+                      </p>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="name">Nombre Completo *</Label>
+                          <Input
+                            id="name"
+                            required
+                            placeholder="Juan Pérez"
+                            value={formData.name}
+                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="email">Correo Electrónico *</Label>
+                          <Input
+                            id="email"
+                            type="email"
+                            required
+                            placeholder="juan@ejemplo.com"
+                            value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="phone">Teléfono *</Label>
+                          <Input
+                            id="phone"
+                            type="tel"
+                            required
+                            placeholder="55 1234 5678"
+                            value={formData.phone}
+                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="service">Servicio de Interés *</Label>
+                          <Select
+                            value={formData.service}
+                            onValueChange={(value) => setFormData({ ...formData, service: value })}
+                            required
+                          >
+                            <SelectTrigger id="service">
+                              <SelectValue placeholder="Selecciona un servicio" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="ppr">PPR - Plan Personal de Retiro</SelectItem>
+                              <SelectItem value="vida">Seguro de Vida</SelectItem>
+                              <SelectItem value="gmm">Gastos Médicos Mayores</SelectItem>
+                              <SelectItem value="auto">Seguro de Auto</SelectItem>
+                              <SelectItem value="multiple">Múltiples Servicios</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+
                       <div className="space-y-2">
-                        <Label htmlFor="name">Nombre Completo *</Label>
-                        <Input
-                          id="name"
-                          required
-                          placeholder="Juan Pérez"
-                          value={formData.name}
-                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        <Label htmlFor="message">Mensaje (opcional)</Label>
+                        <Textarea
+                          id="message"
+                          placeholder="Cuéntanos más sobre tus necesidades..."
+                          rows={4}
+                          value={formData.message}
+                          onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                         />
                       </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="email">Correo Electrónico *</Label>
-                        <Input
-                          id="email"
-                          type="email"
-                          required
-                          placeholder="juan@ejemplo.com"
-                          value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        />
-                      </div>
-                    </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="phone">Teléfono *</Label>
-                        <Input
-                          id="phone"
-                          type="tel"
-                          required
-                          placeholder="55 1234 5678"
-                          value={formData.phone}
-                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="service">Servicio de Interés *</Label>
-                        <Select
-                          value={formData.service}
-                          onValueChange={(value) => setFormData({ ...formData, service: value })}
-                        >
-                          <SelectTrigger id="service">
-                            <SelectValue placeholder="Selecciona un servicio" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="ppr">PPR - Plan Personal de Retiro</SelectItem>
-                            <SelectItem value="vida">Seguro de Vida</SelectItem>
-                            <SelectItem value="gmm">Gastos Médicos Mayores</SelectItem>
-                            <SelectItem value="auto">Seguro de Auto</SelectItem>
-                            <SelectItem value="multiple">Múltiples Servicios</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="message">Mensaje (opcional)</Label>
-                      <Textarea
-                        id="message"
-                        placeholder="Cuéntanos más sobre tus necesidades..."
-                        rows={4}
-                        value={formData.message}
-                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      />
-                    </div>
-
-                    <Button type="submit" className="w-full" size="lg" disabled={submitted}>
-                      {submitted ? (
-                        "Mensaje Enviado ✓"
-                      ) : (
-                        <>
-                          Enviar Solicitud <Send className="w-4 h-4 ml-2" />
-                        </>
-                      )}
-                    </Button>
-                  </form>
+                      <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
+                        {isLoading ? (
+                          "Enviando..."
+                        ) : (
+                          <>
+                            Enviar Solicitud <Send className="w-4 h-4 ml-2" />
+                          </>
+                        )}
+                      </Button>
+                    </form>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -142,7 +190,7 @@ export function ContactForm() {
                       </div>
                       <div>
                         <p className="font-medium text-foreground">Teléfono</p>
-                        <p className="text-sm text-muted-foreground">55 1234 5678</p>
+                        <p className="text-sm text-muted-foreground">55 5951 5885</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
@@ -151,7 +199,7 @@ export function ContactForm() {
                       </div>
                       <div>
                         <p className="font-medium text-foreground">Email</p>
-                        <p className="text-sm text-muted-foreground">contacto@proteccionintegral.mx</p>
+                        <p className="text-sm text-muted-foreground">aargeliasorseguros@yahoo.com</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
