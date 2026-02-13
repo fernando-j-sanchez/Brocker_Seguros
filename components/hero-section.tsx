@@ -62,7 +62,7 @@ export function HeroSection() {
                 <Heart className="w-6 h-6 text-accent" />
               </div>
               <h3 className="font-semibold text-lg mb-2 text-card-foreground">Vida MetLife</h3>
-              <p className="text-sm text-muted-foreground">Protege a tu familia desde $280 MXN mensuales</p>
+              <p className="text-sm text-muted-foreground">Protege a tu familia desde $418 MXN mensuales</p>
             </div>
 
             <div

@@ -6,14 +6,6 @@ import { Button } from "@/components/ui/button"
 export function InsuranceServices() {
   const [activeVideo, setActiveVideo] = useState<number | null>(null)
 
-  // Esta función busca el id="contacto" que ya tienes en tu ContactForm
-  const scrollToContact = () => {
-    const element = document.getElementById("contacto")
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
-    }
-  }
-
   const sections = [
     {
       id: 1,
@@ -56,12 +48,11 @@ export function InsuranceServices() {
             onMouseEnter={() => setActiveVideo(item.id)}
             onMouseLeave={() => setActiveVideo(null)}
           >
-            {/* CORRECCIÓN VISUAL: object-contain para que no se corte la imagen Rosa */}
             <div className="relative h-[400px] w-full bg-slate-50 overflow-hidden">
               {item.type === "video" ? (
                 <video
                   src={item.src}
-                  className="w-full h-full object-contain bg-black"
+                  className="w-full h-full object-cover" // Los videos se ven bien llenando el espacio
                   autoPlay
                   loop
                   playsInline
@@ -71,7 +62,8 @@ export function InsuranceServices() {
                 <img
                   src={item.src}
                   alt={item.title}
-                  className="w-full h-full object-contain bg-white"
+                  // CAMBIO CLAVE AQUÍ: object-contain para que la imagen rosa se vea COMPLETA
+                  className="w-full h-full object-contain bg-white p-4" 
                 />
               )}
               
@@ -86,12 +78,11 @@ export function InsuranceServices() {
                 {item.description}
               </p>
               
-              {/* CORRECCIÓN DEL BOTÓN: Ahora sí dispara el scroll al formulario */}
-              <Button 
-                onClick={scrollToContact}
-                className="mt-6 w-full py-6 bg-slate-900 text-white rounded-xl font-medium transition-all hover:bg-blue-900"
-              >
-                Saber más
+              {/* BOTÓN CORREGIDO: Enlace directo al ID #contacto de tu formulario */}
+              <Button asChild className="mt-6 w-full py-6 bg-slate-900 text-white rounded-xl font-medium transition-all hover:bg-blue-900">
+                <a href="#contacto">
+                  Saber más
+                </a>
               </Button>
             </div>
           </div>
