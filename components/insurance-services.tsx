@@ -79,4 +79,15 @@ export function InsuranceServices() {
               </p>
               
               {/* Enlace directo al ID de contacto para asegurar el salto */}
-              <Button asChild className
+              <Button asChild className="mt-6 w-full py-6 bg-slate-900 text-white rounded-xl font-medium transition-all hover:bg-blue-900">
+                <a href="#contacto">
+                  Saber más
+                </a>
+              </Button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
