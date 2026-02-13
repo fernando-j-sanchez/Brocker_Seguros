@@ -20,272 +20,78 @@ export function MapfreSection() {
               <Shield className="w-4 h-4" />
               <span>Mapfre</span>
             </div>
-            <h2 className="font-display font-bold text-3xl md:text-4xl mb-4 text-foreground">
+            <h2 className="font-display font-bold text-3xl md:text-4xl mb-4 text-foreground text-red-600">
               Soluciones Integrales de Protección
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Seguros médicos, empresariales, autos y protección digital para personas y negocios
+              Seguros médicos, empresariales y protección digital con el respaldo de Mapfre
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            <Card className="border-2 hover:border-primary/50 transition-colors">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
-                  <Car className="w-6 h-6 text-primary" />
-                </div>
-                <CardTitle>Autos Flotilla (Pyme)</CardTitle>
-                <CardDescription>Precio especial para empresas</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="mb-4 p-4 bg-primary/10 rounded-lg border border-primary/20">
-                  <p className="text-sm font-bold text-primary mb-1">
-                    ¡Precio de flotilla a partir de solo 2 unidades!
-                  </p>
-                </div>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Tarifa preferencial para empresas</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Coberturas amplia, limitada y RC</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Atención especializada para flotas</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 items-start">
+            
+            {/* --- BLOQUE VISUAL (Video de Mapfre) --- */}
+            <div className="lg:col-span-5 h-[500px] md:h-[700px] relative rounded-3xl overflow-hidden shadow-2xl group border-4 border-white">
+               <video 
+                src="/images/All2.mp4" 
+                autoPlay 
+                loop 
+                muted 
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-700"
+               />
+               <div className="absolute inset-0 bg-gradient-to-t from-red-900/40 via-transparent to-transparent" />
+            </div>
 
-            <Card className="border-2 hover:border-primary/50 transition-colors">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
-                  <FileText className="w-6 h-6 text-primary" />
-                </div>
-                <CardTitle>Gastos Médicos Mayores</CardTitle>
-                <CardDescription>Protección de salud completa</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Cobertura en hospitales de primer nivel</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Atención ante enfermedades graves</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Cirugías y tratamientos especializados</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Red médica nacional e internacional</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
+            {/* --- BLOQUE DE TARJETAS --- */}
+            <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card className="border-2 hover:border-red-500/50 transition-colors">
+                <CardHeader>
+                  <Car className="w-10 h-10 text-red-600 mb-2" />
+                  <CardTitle>Autos Flotilla</CardTitle>
+                  <CardDescription>A partir de 2 unidades</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground italic mb-2">¡Tarifa preferencial para Pymes!</p>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li className="flex gap-2">✓ Cobertura Amplia y RC</li>
+                    <li className="flex gap-2">✓ Atención especializada</li>
+                  </ul>
+                </CardContent>
+              </Card>
 
-            <Card className="border-2 hover:border-primary/50 transition-colors">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
-                  <Home className="w-6 h-6 text-primary" />
-                </div>
-                <CardTitle>Seguro de Hogar</CardTitle>
-                <CardDescription>Tu casa siempre protegida</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Protección contra incendios y robos</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Daños por fenómenos naturales</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Cobertura de contenidos</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Responsabilidad civil</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
+              <Card className="border-2 hover:border-red-500/50 transition-colors">
+                <CardHeader>
+                  <FileText className="w-10 h-10 text-red-600 mb-2" />
+                  <CardTitle>Gastos Médicos</CardTitle>
+                  <CardDescription>Hospitales de primer nivel</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li className="flex gap-2">✓ Enfermedades graves</li>
+                    <li className="flex gap-2">✓ Red médica nacional</li>
+                  </ul>
+                </CardContent>
+              </Card>
 
-            <Card className="border-2 hover:border-primary/50 transition-colors">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
-                  <Building2 className="w-6 h-6 text-primary" />
-                </div>
-                <CardTitle>Protección de Empresas</CardTitle>
-                <CardDescription>Desde estéticas hasta grandes negocios</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Protección para negocios y comercios</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Desde estéticas hasta grandes empresas</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Cobertura de contenidos y equipo</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Responsabilidad civil empresarial</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className="border-2 border-primary hover:border-primary/70 transition-colors bg-primary/5 md:col-span-2">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center mb-2">
-                  <ShieldAlert className="w-6 h-6 text-primary" />
-                </div>
-                <CardTitle>Protección Digital 360</CardTitle>
-                <CardDescription>Ciberriesgos para tu negocio en la era digital</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid md:grid-cols-3 gap-6">
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                        <Shield className="w-5 h-5 text-primary" />
-                      </div>
-                      <h4 className="font-semibold text-sm">Protección de Reputación</h4>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      Manejo de crisis de comunicación y minimización de publicidad negativa
-                    </p>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                        <ShieldAlert className="w-5 h-5 text-primary" />
-                      </div>
-                      <h4 className="font-semibold text-sm">Restauración de Sistema</h4>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      Limpieza y desinfección de equipos afectados por virus
-                    </p>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                        <FileText className="w-5 h-5 text-primary" />
-                      </div>
-                      <h4 className="font-semibold text-sm">Recuperación de Datos</h4>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      Rescate de información ante fallos lógicos, electrónicos o mecánicos
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+              {/* Tarjeta de Protección Digital Ocupando 2 columnas */}
+              <Card className="md:col-span-2 border-2 border-red-100 bg-red-50/30">
+                <CardHeader>
+                  <ShieldAlert className="w-10 h-10 text-red-600 mb-2" />
+                  <CardTitle>Protección Digital 360</CardTitle>
+                </CardHeader>
+                <CardContent className="grid md:grid-cols-2 gap-4">
+                   <p className="text-sm text-muted-foreground">Recuperación de datos y manejo de crisis de reputación ante ciberataques.</p>
+                   <p className="text-sm text-muted-foreground font-semibold">Cuidado total de tu empresa en la era digital.</p>
+                </CardContent>
+              </Card>
+            </div>
           </div>
 
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle>Conceptos Clave que Debes Conocer</CardTitle>
-              <CardDescription>Entiende los términos importantes de tu póliza de seguros</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="prima">
-                  <AccordionTrigger>
-                    <div className="flex items-center gap-2">
-                      <DollarSign className="w-5 h-5 text-primary" />
-                      <span>Prima</span>
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <p className="text-muted-foreground leading-relaxed">
-                      Es el pago periódico (mensual, trimestral o anual) que realizas a la aseguradora para mantener
-                      activa tu póliza. A cambio de este pago, la aseguradora se compromete a protegerte ante los
-                      siniestros cubiertos en tu contrato.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="deducible">
-                  <AccordionTrigger>
-                    <div className="flex items-center gap-2">
-                      <Info className="w-5 h-5 text-primary" />
-                      <span>Deducible</span>
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <p className="text-muted-foreground leading-relaxed">
-                      Es la cantidad fija que tú pagas de tu bolsillo antes de que el seguro comience a cubrir los
-                      gastos. Por ejemplo, si tu deducible es de $15,000 y tienes gastos médicos por $50,000, tú pagas
-                      los primeros $15,000 y el seguro cubre el resto (sujeto al coaseguro si aplica).
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="coaseguro">
-                  <AccordionTrigger>
-                    <div className="flex items-center gap-2">
-                      <Info className="w-5 h-5 text-primary" />
-                      <span>Coaseguro</span>
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <p className="text-muted-foreground leading-relaxed">
-                      Es el porcentaje de los gastos que tú pagas después del deducible. Comúnmente es 10% o 20%.
-                      Siguiendo el ejemplo anterior: después de tu deducible de $15,000, quedan $35,000. Si tu coaseguro
-                      es del 10%, pagas $3,500 adicionales y el seguro cubre $31,500. Tu total a pagar sería $18,500.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="suma-asegurada">
-                  <AccordionTrigger>
-                    <div className="flex items-center gap-2">
-                      <Shield className="w-5 h-5 text-primary" />
-                      <span>Suma Asegurada</span>
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <p className="text-muted-foreground leading-relaxed">
-                      Es el monto máximo que la aseguradora pagará por concepto de reclamaciones cubiertas durante la
-                      vigencia de tu póliza. En seguros de vida, es la cantidad que recibirán tus beneficiarios. En GMM,
-                      es el límite anual de cobertura para gastos médicos. Es importante elegir una suma asegurada
-                      adecuada a tus necesidades.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </CardContent>
-          </Card>
-
-          <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-8 md:p-12 text-center border border-primary/20">
-            <h3 className="font-display font-bold text-2xl md:text-3xl mb-4 text-foreground">
-              Soluciones Mapfre para personas y negocios
-            </h3>
-            <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-              Nuestros asesores especializados te ayudarán a encontrar la mejor protección para ti y tu empresa
-            </p>
-            <Button
-              size="lg"
-              onClick={scrollToContact}
-              className="bg-primary text-primary-foreground hover:bg-primary/90"
-            >
-              Solicitar Asesoría Personalizada
+          <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-8 text-center border border-red-200">
+            <h3 className="font-display font-bold text-2xl mb-4 text-slate-900">Soluciones Mapfre para tu negocio</h3>
+            <Button onClick={scrollToContact} className="bg-red-600 hover:bg-red-700 text-white px-8 py-6 h-auto text-lg">
+              Solicitar Cotización
             </Button>
           </div>
         </div>
