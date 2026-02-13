@@ -1,8 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 
 export function AllianceCarousel() {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+
   const items = [
     {
       type: "image",
@@ -12,50 +14,68 @@ export function AllianceCarousel() {
     {
       type: "video",
       src: "/images/All1.mp4",
-      alt: "Allianz Video Institucional 1",
+      alt: "Allianz Video 1",
     },
     {
       type: "video",
       src: "/images/All2.mp4",
-      alt: "Allianz Video Institucional 2",
+      alt: "Allianz Video 2",
     },
   ]
 
   return (
-    <div className="py-12 px-4">
-      <h1 className="text-3xl font-semibold text-center mx-auto text-slate-900">
-        Nuestras Soluciones de Protección
+    <div className="py-12 px-4 bg-white">
+      <h1 className="text-3xl font-bold text-center mx-auto text-slate-900 uppercase tracking-wider">
+        FRAMS
       </h1>
       <p className="text-sm text-slate-500 text-center mt-2 max-w-lg mx-auto mb-10">
-        Una colección visual de nuestros trabajos recientes, enfocados en tu seguridad y tranquilidad.
+        Protección integral a tu medida. Calidad y confianza en cada detalle.
       </p>
 
-      {/* Contenedor del Acordeón */}
-      <div className="flex flex-col md:flex-row items-center gap-2 h-[500px] md:h-[450px] w-full max-w-5xl mt-10 mx-auto">
+      {/* Contenedor responsivo: 
+          - En móvil: Columna (flex-col) con altura automática.
+          - En PC: Fila (flex-row) con altura fija.
+      */}
+      <div className="flex flex-col md:flex-row items-center gap-4 w-full max-w-6xl mx-auto h-auto md:h-[500px]">
         {items.map((item, index) => (
           <div
             key={index}
-            className="relative group flex-grow transition-all w-full md:w-56 rounded-lg overflow-hidden h-full duration-500 hover:md:w-full shadow-md"
+            onMouseEnter={() => setHoveredIndex(index)}
+            onMouseLeave={() => setHoveredIndex(null)}
+            className={`
+              relative overflow-hidden rounded-2xl transition-all duration-700 ease-in-out shadow-xl
+              w-full md:flex-grow
+              ${hoveredIndex === index ? "h-[400px] md:h-full md:flex-[3]" : "h-[150px] md:h-full md:flex-[1]"}
+            `}
           >
             {item.type === "video" ? (
               <video
                 src={item.src}
-                className="h-full w-full object-cover object-center"
+                className={`w-full h-full object-cover transition-all duration-700 ${
+                  hoveredIndex === index ? "md:object-contain bg-black" : "object-cover"
+                }`}
                 autoPlay
                 loop
-                muted
                 playsInline
+                // Aquí activamos el sonido solo si el mouse está encima
+                muted={hoveredIndex !== index}
               />
             ) : (
               <img
                 src={item.src}
                 alt={item.alt}
-                className="h-full w-full object-cover object-center"
+                className={`w-full h-full transition-all duration-700 ${
+                  hoveredIndex === index ? "md:object-contain bg-gray-50" : "object-cover"
+                }`}
               />
             )}
-            
-            {/* Overlay sutil para mejorar el aspecto visual */}
-            <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500" />
+
+            {/* Texto que aparece solo al expandirse */}
+            <div className={`absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/80 to-transparent transition-opacity duration-500 ${
+              hoveredIndex === index ? "opacity-100" : "opacity-0"
+            }`}>
+              <p className="text-white font-medium text-lg">{item.alt}</p>
+            </div>
           </div>
         ))}
       </div>
