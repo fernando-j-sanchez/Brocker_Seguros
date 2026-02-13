@@ -1,9 +1,18 @@
 "use client"
 
 import { useState } from "react"
+import { Button } from "@/components/ui/button"
 
 export function InsuranceServices() {
   const [activeVideo, setActiveVideo] = useState<number | null>(null)
+
+  // Esta función busca el id="contacto" que ya tienes en tu ContactForm
+  const scrollToContact = () => {
+    const element = document.getElementById("contacto")
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" })
+    }
+  }
 
   const sections = [
     {
@@ -18,7 +27,7 @@ export function InsuranceServices() {
       id: 2,
       brand: "MetLife",
       type: "video",
-      src: "/images/All2.mp4", // Mencionaste que All2 va aquí
+      src: "/images/All2.mp4", 
       title: "Protección MetLife",
       description: "Seguros de vida diseñados para tu tranquilidad y la de los tuyos."
     },
@@ -35,25 +44,24 @@ export function InsuranceServices() {
   return (
     <div className="py-16 px-4 max-w-7xl mx-auto">
       <div className="text-center mb-12">
-        <h2 className="text-4xl font-bold text-slate-900 tracking-tight">Nuestros Aliados</h2>
-        <p className="text-slate-500 mt-4 text-lg">En FRAMS trabajamos con los mejores para tu seguridad.</p>
+        <h2 className="text-4xl font-bold text-slate-900 tracking-tight uppercase">FRAMS</h2>
+        <p className="text-slate-500 mt-4 text-lg">Tu seguridad es nuestra prioridad.</p>
       </div>
 
-      {/* Grid Responsivo: 1 columna en móvil, 3 en escritorio */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {sections.map((item) => (
           <div 
             key={item.id}
-            className="group relative bg-white rounded-3xl overflow-hidden shadow-2xl transition-transform duration-500 hover:-translate-y-2"
+            className="group relative bg-white rounded-3xl overflow-hidden shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-slate-100"
             onMouseEnter={() => setActiveVideo(item.id)}
             onMouseLeave={() => setActiveVideo(null)}
           >
-            {/* Contenedor de Media */}
-            <div className="relative h-[450px] w-full overflow-hidden">
+            {/* CORRECCIÓN VISUAL: object-contain para que no se corte la imagen Rosa */}
+            <div className="relative h-[400px] w-full bg-slate-50 overflow-hidden">
               {item.type === "video" ? (
                 <video
                   src={item.src}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain bg-black"
                   autoPlay
                   loop
                   playsInline
@@ -63,25 +71,28 @@ export function InsuranceServices() {
                 <img
                   src={item.src}
                   alt={item.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="w-full h-full object-contain bg-white"
                 />
               )}
               
-              {/* Badge de la Marca */}
-              <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-4 py-1 rounded-full shadow-sm">
-                <span className="text-xs font-bold uppercase text-slate-700">{item.brand}</span>
+              <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-4 py-1 rounded-full shadow-sm border border-slate-200">
+                <span className="text-[10px] font-bold uppercase text-slate-700 tracking-widest">{item.brand}</span>
               </div>
             </div>
 
-            {/* Información Personalizada */}
             <div className="p-8">
               <h3 className="text-2xl font-semibold text-slate-800">{item.title}</h3>
-              <p className="mt-3 text-slate-600 leading-relaxed">
+              <p className="mt-3 text-slate-600 leading-relaxed text-sm">
                 {item.description}
               </p>
-              <button className="mt-6 w-full py-3 bg-slate-900 text-white rounded-xl font-medium transition-colors hover:bg-slate-700">
+              
+              {/* CORRECCIÓN DEL BOTÓN: Ahora sí dispara el scroll al formulario */}
+              <Button 
+                onClick={scrollToContact}
+                className="mt-6 w-full py-6 bg-slate-900 text-white rounded-xl font-medium transition-all hover:bg-blue-900"
+              >
                 Saber más
-              </button>
+              </Button>
             </div>
           </div>
         ))}
