@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area, Line } from "recharts"
 import { Calculator, TrendingUp, Send, CheckCircle2 } from "lucide-react"
-import { AllianceCarousel } from "@/components/alliance-carousel"
+import { InsuranceServices } from "@/components/insurance-services" 
 import { createClient } from "@/lib/supabase/client"
 import { useToast } from "@/hooks/use-toast"
 import {
@@ -176,7 +176,7 @@ export function PPRSimulator() {
             </p>
           </div>
 
-          <AllianceCarousel />
+          <InsuranceServices />
 
           <Card className="mb-8">
             <CardHeader>

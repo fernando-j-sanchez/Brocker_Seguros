@@ -116,7 +116,7 @@ export function MetLifeSection() {
                   <div>
                     <div className="mb-4 p-4 bg-accent/10 rounded-lg border border-accent/20">
                       <p className="text-sm text-muted-foreground mb-1">Que tu hijo empiece a ahorrar desde</p>
-                      <p className="text-3xl font-bold text-accent">$280 MXN</p>
+                      <p className="text-3xl font-bold text-accent">$418 MXN</p>
                       <p className="text-xs text-muted-foreground">mensuales</p>
                     </div>
                   </div>
