@@ -13,7 +13,7 @@ export function Footer() {
                 <div className="w-10 h-10 bg-background rounded-lg flex items-center justify-center">
                   <Shield className="w-6 h-6 text-foreground" />
                 </div>
-                <span className="font-display font-bold text-xl">Protección Integral</span>
+                <span className="font-display font-bold text-xl">FRAMS</span>
               </div>
               <p className="text-sm text-background/70 leading-relaxed max-w-md">
                 Tu broker de confianza especializado en soluciones de seguros y planes de retiro. Protegemos tu futuro y
@@ -72,7 +72,7 @@ export function Footer() {
           <div className="border-t border-background/20 pt-8">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <p className="text-sm text-background/70">
-                © {currentYear} Protección Integral. Todos los derechos reservados.
+                © {currentYear} FRAMS. Todos los derechos reservados.
               </p>
               <div className="flex items-center gap-4">
                 <a

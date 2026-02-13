@@ -3,99 +3,62 @@
 import { useState } from "react"
 
 export function AllianceCarousel() {
-  const [stopScroll, setStopScroll] = useState(false)
-
-  const images = [
+  const items = [
     {
-      src: "/images/1.jpeg",
-      alt: "OptiMaxx plus - Plan personal de retiro con Allianz",
+      type: "image",
+      src: "/images/Rosa.jpeg",
+      alt: "Seguro de Vida Rosa",
     },
     {
-      src: "/images/2.jpeg",
-      alt: "Allianz y Grupo Neuss - Distribuidor Autorizado",
+      type: "video",
+      src: "/images/All1.mp4",
+      alt: "Allianz Video Institucional 1",
     },
     {
-      src: "/images/3.jpeg",
-      alt: "Beneficios fiscales para incentivar el ahorro para el retiro",
-    },
-    {
-      src: "/images/4.jpeg",
-      alt: "OptiMaxx plus con beneficios fiscales para la jubilación",
-    },
-    {
-      src: "/images/5.jpeg",
-      alt: "OptiMaxx plus - ¿Cómo quieres disfrutar tu retiro?",
+      type: "video",
+      src: "/images/All2.mp4",
+      alt: "Allianz Video Institucional 2",
     },
   ]
 
   return (
-    <>
-      <style>{`
-        .marquee-inner {
-          animation: marqueeScroll linear infinite;
-        }
+    <div className="py-12 px-4">
+      <h1 className="text-3xl font-semibold text-center mx-auto text-slate-900">
+        Nuestras Soluciones de Protección
+      </h1>
+      <p className="text-sm text-slate-500 text-center mt-2 max-w-lg mx-auto mb-10">
+        Una colección visual de nuestros trabajos recientes, enfocados en tu seguridad y tranquilidad.
+      </p>
 
-        /* Pausar la animación si se está interactuando */
-        .marquee-inner.paused {
-          animation-play-state: paused;
-        }
-
-        @keyframes marqueeScroll {
-          0% {
-            transform: translateX(0%);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-      `}</style>
-
-      <div
-        // Añadimos padding vertical (py-10) para que las imágenes tengan espacio al crecer
-        // y no se corten por el overflow-hidden del contenedor principal.
-        className="overflow-hidden w-full relative max-w-6xl mx-auto mb-12 py-10"
-        onMouseEnter={() => setStopScroll(true)}
-        onMouseLeave={() => setStopScroll(false)}
-        onTouchStart={() => setStopScroll(true)}
-        onTouchEnd={() => setStopScroll(false)}
-      >
-        <div className="absolute left-0 top-0 h-full w-20 md:w-32 z-10 pointer-events-none bg-gradient-to-r from-muted/30 to-transparent" />
-        <div
-          // Usamos una clase CSS para pausar la animación, lo que es más fluido
-          className={`marquee-inner flex w-fit ${stopScroll ? "paused" : ""}`}
-          style={{
-            // Mantenemos la velocidad lenta de 6 segundos por imagen
-            animationDuration: `${images.length * 6000}ms`,
-          }}
-        >
-          <div className="flex items-center">
-            {[...images, ...images].map((image, index) => (
-              <div
-                key={index}
-                // --- CAMBIOS CLAVE AQUÍ ---
-                // 1. hover:scale-110: Agranda la tarjeta un 10% al pasar el mouse.
-                // 2. hover:z-30: Trae la tarjeta al frente de las demás.
-                // 3. transition-all duration-500 ease-in-out: Suaviza mucho el efecto de crecimiento.
-                // 4. group-hover:bg-white group-hover:shadow-2xl: Añade fondo y sombra solo al hacer hover para resaltar.
-                className="w-64 md:w-80 mx-4 h-[28rem] md:h-[32rem] relative group hover:scale-110 hover:z-30 transition-all duration-500 ease-in-out rounded-xl group-hover:bg-white group-hover:shadow-2xl"
-              >
-                <img
-                  src={image.src}
-                  alt={image.alt}
-                  // --- CAMBIOS CLAVE AQUÍ ---
-                  // 1. object-cover: Por defecto, la imagen llena la tarjeta (se ve bonita pero cortada).
-                  // 2. group-hover:object-contain: Al hacer hover, la imagen se ajusta para verse COMPLETA y poder leerse.
-                  // 3. Quitamos el padding (p-2) para que llene el espacio.
-                  className="w-full h-full object-cover group-hover:object-contain rounded-xl transition-all duration-500 ease-in-out"
-                />
-                {/* Degradado decorativo: Lo ocultamos al hacer hover para que no estorbe la lectura */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent rounded-xl opacity-100 group-hover:opacity-0 transition-opacity duration-500" />
-              </div>
-            ))}
+      {/* Contenedor del Acordeón */}
+      <div className="flex flex-col md:flex-row items-center gap-2 h-[500px] md:h-[450px] w-full max-w-5xl mt-10 mx-auto">
+        {items.map((item, index) => (
+          <div
+            key={index}
+            className="relative group flex-grow transition-all w-full md:w-56 rounded-lg overflow-hidden h-full duration-500 hover:md:w-full shadow-md"
+          >
+            {item.type === "video" ? (
+              <video
+                src={item.src}
+                className="h-full w-full object-cover object-center"
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
+            ) : (
+              <img
+                src={item.src}
+                alt={item.alt}
+                className="h-full w-full object-cover object-center"
+              />
+            )}
+            
+            {/* Overlay sutil para mejorar el aspecto visual */}
+            <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500" />
           </div>
-        </div>
-        <div className="absolute right-0 top-0 h-full w-20 md:w-32 z-10 pointer-events-none bg-gradient-to-l from-muted/30 to-transparent" />
+        ))}
       </div>
-    </>
+    </div>
   )
 }
