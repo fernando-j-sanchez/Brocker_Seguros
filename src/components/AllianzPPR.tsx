@@ -188,7 +188,7 @@ export const AllianzPPR = () => {
         {/* Nota Legal */}
         <div className="mt-8 p-6 bg-blue-50 dark:bg-blue-900/20 rounded-2xl border border-blue-100 dark:border-blue-800 text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
           <span className="font-bold text-blue-800 dark:text-blue-300 mr-1 uppercase">Nota:</span> 
-          Estos números son una proyección estimada y sirven únicamente como referencia. El monto final puede variar según las condiciones del mercado, las comisiones de la operadora y el plan específico que elijas. Para una cifra definitiva y legal, es indispensable validarlo con tu asesor financiero, ya que este cálculo no constituye un contrato ni una oferta de inversión.
+          Estos números son una proyección estimada y sirven únicamente como referencia. El monto final puede variar según las condiciones del mercado, las comisiones de la operación y el plan específico que elijas. Para una cifra definitiva y legal, es indispensable validarlo con tu asesor financiero, ya que este cálculo no constituye un contrato ni una oferta de inversión.
         </div>
       </div>
     </section>

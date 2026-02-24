@@ -24,7 +24,7 @@ export function LifeInsuranceSection() {
               Seguros de Vida, Gastos Médicos y Protección Empresarial
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              FRAMS para ti, tu familia y tu negocio
+              NISSI para ti, tu familia y tu negocio
             </p>
           </div>
 

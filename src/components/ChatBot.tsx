@@ -23,7 +23,7 @@ export const ChatBot = () => {
   const [step, setStep] = useState(0);
   const [messages, setMessages] = useState<Message[]>([
     { 
-      text: '¡Hola! 👋 Soy el asistente virtual de FRAMS. ¿Cómo te llamas?', 
+      text: '¡Hola! 👋 Soy el asistente virtual de NISSI. ¿Cómo te llamas?', 
       isUser: false,
       timestamp: new Date()
     }
@@ -176,7 +176,7 @@ export const ChatBot = () => {
         // Paso: Redirigir a WhatsApp
         if (input.includes('si') || input.includes('whats') || input.includes('sí')) {
           const interes = formData.interes || 'seguros';
-          const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(`¡Hola! Me interesa conocer más sobre ${interes}. Me contacté por el chat de FRAMS.`)}`;
+          const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(`¡Hola! Me interesa conocer más sobre ${interes}. Me contacté por el chat de NISSI.`)}`;
           window.open(whatsappUrl, '_blank');
           response = '¡Perfecto! Te he redirigido a WhatsApp. Un asesor te atenderá en segundos.';
         } else {
@@ -229,7 +229,7 @@ export const ChatBot = () => {
         transition={{ duration: 2, repeat: Infinity }}
       >
         <MessageCircle className="w-5 h-5" />
-        <span className="font-medium">Chat FRAMS</span>
+        <span className="font-medium">Chat NISSI</span>
         <motion.div 
           className="w-2 h-2 bg-green-400 rounded-full"
           animate={{ scale: [1, 1.3, 1] }}
@@ -260,7 +260,7 @@ export const ChatBot = () => {
                   <Bot className="w-6 h-6" />
                 </motion.div>
                 <div>
-                  <span className="font-semibold text-lg">Asistente FRAMS</span>
+                  <span className="font-semibold text-lg">Asistente NISSI</span>
                   <div className="flex items-center gap-1 text-xs text-blue-100">
                     <Sparkles className="w-3 h-3" />
                     <span>Online • Respuesta inmediata</span>

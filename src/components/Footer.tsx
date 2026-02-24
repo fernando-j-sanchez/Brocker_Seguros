@@ -145,7 +145,7 @@ export const Footer = () => {
               <div className="flex space-x-4">
                 {[
                   { icon: Facebook, href: 'https://www.facebook.com/profile.php?id=61588330452594', color: 'bg-blue-600' },
-                  { icon: Instagram, href: 'https://www.instagram.com/frams_seguros?igsh=ODJwcnYzNGl3ZXNk', color: 'bg-pink-600' },
+                  { icon: Instagram, href: 'https://www.instagram.com/NISSI_seguros?igsh=ODJwcnYzNGl3ZXNk', color: 'bg-pink-600' },
                   { icon: Linkedin, href: '#', color: 'bg-blue-700' }
                 ].map((social, i) => (
                   <motion.a
@@ -308,7 +308,7 @@ export const Footer = () => {
           className="border-t border-gray-800 pt-8 text-center text-gray-400 text-sm"
           variants={itemVariants}
         >
-          <p>&copy; {new Date().getFullYear()} FRAMS. Todos los derechos reservados.</p>
+          <p>&copy; {new Date().getFullYear()} NISSI. Todos los derechos reservados.</p>
         </motion.div>
       </motion.div>
     </footer>

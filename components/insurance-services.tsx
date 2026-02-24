@@ -36,7 +36,7 @@ export function InsuranceServices() {
   return (
     <div className="py-16 px-4 max-w-7xl mx-auto">
       <div className="text-center mb-12">
-        <h2 className="text-4xl font-bold text-slate-900 tracking-tight uppercase">FRAMS</h2>
+        <h2 className="text-4xl font-bold text-slate-900 tracking-tight uppercase">NISSI</h2>
         <p className="text-slate-500 mt-4 text-lg">Tu seguridad es nuestra prioridad.</p>
       </div>
 

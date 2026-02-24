@@ -128,7 +128,7 @@ export const Navbar = () => {
               }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              FRAMS
+              NISSI
             </motion.span>
           </motion.a>
 
