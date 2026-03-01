@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
-import { Shield, DollarSign, FileText, Info, Building2, Home, ShieldAlert, Car } from "lucide-react"
+import { Shield, DollarSign, FileText, Info, Building2, Home, ShieldAlert, Car, GraduationCap } from "lucide-react"
 
 export function MapfreSection() {
   const scrollToContact = () => {
@@ -24,11 +24,12 @@ export function MapfreSection() {
               Soluciones Integrales de Protección
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Seguros médicos, empresariales, autos y protección digital para personas y negocios
+              Seguros médicos, empresariales, autos, ahorro educativo y protección digital para personas y negocios
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {/* Autos Flotilla */}
             <Card className="border-2 hover:border-primary/50 transition-colors">
               <CardHeader>
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
@@ -60,6 +61,7 @@ export function MapfreSection() {
               </CardContent>
             </Card>
 
+            {/* Gastos Médicos Mayores */}
             <Card className="border-2 hover:border-primary/50 transition-colors">
               <CardHeader>
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
@@ -90,6 +92,7 @@ export function MapfreSection() {
               </CardContent>
             </Card>
 
+            {/* Seguro de Hogar */}
             <Card className="border-2 hover:border-primary/50 transition-colors">
               <CardHeader>
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
@@ -120,6 +123,7 @@ export function MapfreSection() {
               </CardContent>
             </Card>
 
+            {/* Protección de Empresas */}
             <Card className="border-2 hover:border-primary/50 transition-colors">
               <CardHeader>
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
@@ -150,6 +154,43 @@ export function MapfreSection() {
               </CardContent>
             </Card>
 
+            {/* SUPERACIÓN PLUS - NUEVO NOMBRE */}
+            <Card className="border-2 hover:border-primary/50 transition-colors">
+              <CardHeader>
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
+                  <GraduationCap className="w-6 h-6 text-primary" />
+                </div>
+                <CardTitle>Superación Plus</CardTitle>
+                <CardDescription>Ahorro educativo para el futuro de tus hijos</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="mb-4 p-4 bg-primary/10 rounded-lg border border-primary/20">
+                  <p className="text-sm font-bold text-primary mb-1">
+                    ¡Aportaciones desde $418 MXN mensuales!
+                  </p>
+                </div>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-2">
+                    <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <span className="text-sm text-muted-foreground">Plan de ahorro diseñado especialmente para la educación de tus hijos</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <span className="text-sm text-muted-foreground">Garantiza su futuro académico y profesional</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <span className="text-sm text-muted-foreground">Protección de vida incluida desde temprana edad</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <span className="text-sm text-muted-foreground">Flexibilidad en aportaciones y plazos</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* Protección Digital 360 - Ocupa 2 columnas en md */}
             <Card className="border-2 border-primary hover:border-primary/70 transition-colors bg-primary/5 md:col-span-2">
               <CardHeader>
                 <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center mb-2">
@@ -198,6 +239,7 @@ export function MapfreSection() {
             </Card>
           </div>
 
+          {/* Conceptos Clave */}
           <Card className="mb-8">
             <CardHeader>
               <CardTitle>Conceptos Clave que Debes Conocer</CardTitle>
@@ -264,8 +306,7 @@ export function MapfreSection() {
                     <p className="text-muted-foreground leading-relaxed">
                       Es el monto máximo que la aseguradora pagará por concepto de reclamaciones cubiertas durante la
                       vigencia de tu póliza. En seguros de vida, es la cantidad que recibirán tus beneficiarios. En GMM,
-                      es el límite anual de cobertura para gastos médicos. Es importante elegir una suma asegurada
-                      adecuada a tus necesidades.
+                      es el límite anual de cobertura para gastos médicos. En Superación Plus, es el monto que se entregará para la educación de tus hijos.
                     </p>
                   </AccordionContent>
                 </AccordionItem>
@@ -273,12 +314,13 @@ export function MapfreSection() {
             </CardContent>
           </Card>
 
+          {/* CTA Final */}
           <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-8 md:p-12 text-center border border-primary/20">
             <h3 className="font-display font-bold text-2xl md:text-3xl mb-4 text-foreground">
               Soluciones Mapfre para personas y negocios
             </h3>
             <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-              Nuestros asesores especializados te ayudarán a encontrar la mejor protección para ti y tu empresa
+              Desde protección médica hasta ahorro educativo con Superación Plus, nuestros asesores te ayudarán a encontrar la mejor opción para ti y tu familia
             </p>
             <Button
               size="lg"

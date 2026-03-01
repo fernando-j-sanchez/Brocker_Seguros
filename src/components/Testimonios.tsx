@@ -13,7 +13,7 @@ const testimonios = [
   {
     name: 'Ana Sofía Delgado',
     role: 'Médico',
-    text: 'Contraté el plan Pequeños Gigantes de MetLife para mis hijos. Es la mejor inversión que he hecho para asegurar su futuro educativo.',
+    text: 'Contraté el plan Superaciñon Plus de Mapre para mis hijos. Es la mejor inversión que he hecho para asegurar su futuro educativo.',
     rating: 4,
     image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop'
   },

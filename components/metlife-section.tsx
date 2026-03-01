@@ -1,159 +1,185 @@
-"use client"
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Heart, Shield, Users, Gift, CheckCircle, TrendingUp, Baby, Phone, Star, Award, Clock, ThumbsUp } from 'lucide-react';
+import { VideoPlayer } from './VideoPlayer';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Heart, Shield } from "lucide-react"
+export const MetLife = () => {
+  const features = [
+    {
+      icon: Shield,
+      title: "Protección integral",
+      description: "Cobertura completa para situaciones inesperadas."
+    },
+    {
+      icon: Heart,
+      title: "Seguro de vida",
+      description: "Garantiza el bienestar de tus seres queridos."
+    },
+    {
+      icon: Users,
+      title: "Plan familiar",
+      description: "Toda tu familia bajo una sola póliza."
+    },
+    {
+      icon: Gift,
+      title: "Beneficios extra",
+      description: "Programas de bienestar y descuentos exclusivos."
+    }
+  ];
 
-export function MetLifeSection() {
-  const scrollToContact = () => {
-    const element = document.getElementById("contacto")
-    if (element) element.scrollIntoView({ behavior: "smooth" })
-  }
+  const products = [
+    {
+      name: 'Seguro de Vida',
+      icon: Heart,
+      description: 'Protección completa para tu familia',
+      benefits: [
+        'Protección por fallecimiento e invalidez',
+        'Suma asegurada personalizada',
+        'Pagos mensuales, trimestrales o anuales',
+        'Gastos funerarios incluidos',
+        'Cobertura adicional de cáncer',
+        '+20 coberturas adaptables'
+      ],
+      extraIcons: [
+        { icon: Shield, label: '24/7' },
+        { icon: Star, label: 'Global' },
+        { icon: Award, label: 'Respaldo' }
+      ]
+    },
+    {
+      name: 'Ahorro Flexible',
+      icon: TrendingUp,
+      description: 'Construye tu patrimonio',
+      price: '500',
+      period: 'mensuales',
+      benefits: [
+        'Ahorro con protección de vida',
+        'Flexibilidad en montos',
+        'Rendimientos competitivos',
+        'Sin penalizaciones'
+      ],
+      extraIcons: [
+        { icon: Clock, label: 'Plazos' },
+        { icon: TrendingUp, label: 'Rendimiento' },
+        { icon: ThumbsUp, label: 'Fácil' }
+      ]
+    }
+  ];
+
+  const handleContactClick = () => {
+    document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
-    <section id="metlife" className="py-16 md:py-24 bg-background">
-      <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-accent/10 text-accent text-sm font-medium mb-4">
-              <Heart className="w-4 h-4" />
-              <span>MetLife</span>
-            </div>
-            <h2 className="font-display font-bold text-3xl md:text-4xl mb-4 text-foreground">
-              Seguros de Vida y Protección Familiar
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Protege a los que más amas con las soluciones de vida de MetLife
-            </p>
+    <section id="metlife" className="py-16 px-4 bg-gray-50 dark:bg-gray-900">
+      <div className="container mx-auto max-w-6xl">
+        
+        {/* Título Principal */}
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-black text-blue-900 dark:text-white uppercase tracking-tighter">
+            MetLife <span className="text-blue-500">Seguros</span>
+          </h2>
+          <p className="text-gray-500 dark:text-gray-400 font-medium">La protección que tu familia merece con respaldo internacional.</p>
+        </div>
+
+        {/* Bloque Superior: Video + Features Grid */}
+        <div className="flex flex-col lg:flex-row overflow-hidden rounded-3xl shadow-2xl bg-white dark:bg-gray-800 border dark:border-gray-700 mb-12">
+          
+          {/* Video (50%) */}
+          <div className="lg:w-1/2 bg-black relative min-h-[350px]">
+            <VideoPlayer videoSrc="/videos/All2.mp4" />
+            <style>{`video { width: 100%; height: 100%; object-fit: cover; }`}</style>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            <Card className="border-2 hover:border-accent/50 transition-colors">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-2">
-                  <Heart className="w-6 h-6 text-accent" />
-                </div>
-                <CardTitle>Seguro de Vida</CardTitle>
-                <CardDescription>Protección completa para tu familia</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Protección en caso de fallecimiento</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Cobertura por invalidez total y permanente</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">
-                      Suma asegurada personalizada según tus necesidades
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Pagos flexibles: mensual, trimestral o anual</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Cobertura adicional de cáncer</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Gastos funerarios incluidos</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">+20 coberturas adaptables a tu medida</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className="border-2 hover:border-accent/50 transition-colors bg-accent/5">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-2">
-                  <Heart className="w-6 h-6 text-accent" />
-                </div>
-                <CardTitle>Ahorro Flexible</CardTitle>
-                <CardDescription>Construye tu patrimonio con flexibilidad</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="mb-4 p-4 bg-accent/10 rounded-lg border border-accent/20">
-                  <p className="text-sm text-muted-foreground mb-1">Aportaciones desde</p>
-                  <p className="text-3xl font-bold text-accent">$500 MXN</p>
-                  <p className="text-xs text-muted-foreground">mensuales</p>
-                </div>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Ahorro con protección de vida incluida</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Flexibilidad para aumentar o disminuir montos</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Rendimientos competitivos</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className="border-2 hover:border-accent/50 transition-colors bg-accent/5 md:col-span-2">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-2">
-                  <Heart className="w-6 h-6 text-accent" />
-                </div>
-                <CardTitle>Pequeños Gigantes</CardTitle>
-                <CardDescription>El mejor regalo para el futuro de tus hijos</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <div className="mb-4 p-4 bg-accent/10 rounded-lg border border-accent/20">
-                      <p className="text-sm text-muted-foreground mb-1">Que tu hijo empiece a ahorrar desde</p>
-                      <p className="text-3xl font-bold text-accent">$418 MXN</p>
-                      <p className="text-xs text-muted-foreground">mensuales</p>
-                    </div>
+          {/* Features Grid (50%) */}
+          <div className="lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center bg-white dark:bg-gray-800">
+            <h3 className="text-2xl font-bold mb-6 text-blue-900 dark:text-white">¿Por qué elegir MetLife?</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {features.map((feature, index) => (
+                <div key={index} className="flex flex-col gap-2">
+                  <div className="w-10 h-10 bg-blue-50 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                    <feature.icon className="w-6 h-6 text-blue-600" />
                   </div>
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-2">
-                      <Shield className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
-                      <span className="text-sm text-muted-foreground">
-                        Plan de ahorro diseñado especialmente para niños
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Shield className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
-                      <span className="text-sm text-muted-foreground">Protección de vida desde temprana edad</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Shield className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
-                      <span className="text-sm text-muted-foreground">Asegura su educación y futuro financiero</span>
-                    </li>
-                  </ul>
+                  <div>
+                    <h4 className="font-bold text-gray-800 dark:text-gray-200 text-sm uppercase tracking-wide">{feature.title}</h4>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{feature.description}</p>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
+              ))}
+            </div>
+            
+            <div className="mt-8 pt-8 border-t dark:border-gray-700">
+               <button onClick={handleContactClick} className="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-200 dark:shadow-none">
+                 <Phone size={18}/> Solicitar Asesoría MetLife
+               </button>
+            </div>
           </div>
+        </div>
 
-          <div className="bg-gradient-to-br from-accent/5 to-accent/10 rounded-2xl p-8 md:p-12 text-center border border-accent/20">
-            <h3 className="font-display font-bold text-2xl md:text-3xl mb-4 text-foreground">
-              Protege a tu familia con MetLife
-            </h3>
-            <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-              Nuestros asesores te ayudarán a encontrar el plan perfecto según tus necesidades y presupuesto
-            </p>
-            <Button size="lg" onClick={scrollToContact} className="bg-accent text-accent-foreground hover:bg-accent/90">
-              Solicitar Asesoría Personalizada
-            </Button>
-          </div>
+        {/* Product Cards - Solo 2 productos */}
+        <div className="grid md:grid-cols-2 gap-6 mb-12 max-w-4xl mx-auto">
+          {products.map((product, index) => (
+            <motion.div
+              key={product.name}
+              whileHover={{ y: -5 }}
+              className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 flex flex-col h-full"
+            >
+              <div className="p-6 flex-grow">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="bg-blue-50 dark:bg-blue-900/30 p-3 rounded-xl">
+                    <product.icon className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <h3 className="font-black text-gray-800 dark:text-white uppercase text-sm tracking-tight">{product.name}</h3>
+                </div>
+                
+                <p className="text-xs text-gray-500 mb-4">{product.description}</p>
+                
+                {product.price && (
+                  <div className="mb-4">
+                    <span className="text-2xl font-black text-blue-600">${product.price}</span>
+                    <span className="text-[10px] text-gray-400 font-bold uppercase ml-1">MXN / {product.period}</span>
+                  </div>
+                )}
+                
+                <ul className="space-y-2 mb-6">
+                  {product.benefits.map((benefit, i) => (
+                    <li key={i} className="text-[11px] text-gray-600 dark:text-gray-300 flex items-start gap-2">
+                      <CheckCircle className="w-3.5 h-3.5 text-blue-500 flex-shrink-0 mt-0.5" />
+                      <span>{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Footer de la tarjeta con mini iconos */}
+              <div className="p-4 bg-gray-50 dark:bg-gray-700/50 border-t dark:border-gray-700 grid grid-cols-3 gap-1 rounded-b-2xl">
+                {product.extraIcons.map((item, i) => (
+                  <div key={i} className="flex flex-col items-center">
+                    <item.icon className="w-4 h-4 text-blue-400 mb-1" />
+                    <span className="text-[8px] text-gray-400 font-bold uppercase text-center">{item.label}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Nota de confianza */}
+        <div className="p-6 bg-blue-900 text-white rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6">
+           <div className="flex items-center gap-4">
+              <div className="p-3 bg-white/10 rounded-2xl">
+                <Shield size={32} className="text-blue-300" />
+              </div>
+              <div>
+                <h4 className="font-bold text-lg">Respaldo Total</h4>
+                <p className="text-blue-200 text-xs">Más de 150 años protegiendo lo que más importa a nivel mundial.</p>
+              </div>
+           </div>
+           <button onClick={handleContactClick} className="px-8 py-3 bg-white text-blue-900 rounded-xl font-black text-sm uppercase hover:bg-blue-50 transition-colors shrink-0">
+              Ver coberturas
+           </button>
         </div>
       </div>
     </section>
-  )
-}
+  );
+};

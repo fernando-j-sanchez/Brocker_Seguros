@@ -62,24 +62,6 @@ export const MetLife = () => {
         { icon: ThumbsUp, label: 'Fácil' }
       ]
     },
-    {
-      name: 'Pequeños Gigantes',
-      icon: Baby,
-      description: 'Futuro para tus hijos',
-      price: '418',
-      period: 'mensuales',
-      benefits: [
-        'Ahorro para educación',
-        'Protección desde edad temprana',
-        'Asegura su futuro financiero',
-        'El mejor regalo'
-      ],
-      extraIcons: [
-        { icon: Baby, label: 'Niños' },
-        { icon: Shield, label: 'Protección' },
-        { icon: Award, label: 'Educación' }
-      ]
-    }
   ];
 
   const handleContactClick = () => {
