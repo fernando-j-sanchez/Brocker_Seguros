@@ -8,22 +8,22 @@ export const MetLife = () => {
     {
       icon: Shield,
       title: "Protección integral",
-      description: "Cobertura completa para situaciones inesperadas."
+      description: "Cobertura completa para ti y tu familia en situaciones inesperadas. Incluye respaldo internacional."
     },
     {
       icon: Heart,
       title: "Seguro de vida",
-      description: "Garantiza el bienestar de tus seres queridos."
+      description: "Garantiza el bienestar económico de tus seres queridos siempre. Hasta 20 coberturas adicionales."
     },
     {
       icon: Users,
       title: "Plan familiar",
-      description: "Toda tu familia bajo una sola póliza."
+      description: "Toda tu familia bajo una sola póliza con beneficios extendidos para cónyuge e hijos."
     },
     {
       icon: Gift,
-      title: "Beneficios extra",
-      description: "Programas de bienestar y descuentos exclusivos."
+      title: "Beneficios exclusivos",
+      description: "Acceso a programas de bienestar, descuentos en salud y servicios de asistencia 24/7."
     }
   ];
 
@@ -36,7 +36,9 @@ export const MetLife = () => {
         'Protección por fallecimiento e invalidez',
         'Suma asegurada personalizada',
         'Pagos mensuales, trimestrales o anuales',
-        'Gastos funerarios incluidos'
+        'Gastos funerarios incluidos',
+        'Cobertura adicional de cáncer',
+        '+20 coberturas adaptables'
       ],
       extraIcons: [
         { icon: Shield, label: '24/7' },
@@ -61,8 +63,8 @@ export const MetLife = () => {
         { icon: TrendingUp, label: 'Rendimiento' },
         { icon: ThumbsUp, label: 'Fácil' }
       ]
-    },
-  ];
+    }
+  ]; // ← Aquí faltaba el cierre del array y el punto y coma
 
   const handleContactClick = () => {
     document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' });
@@ -89,7 +91,7 @@ export const MetLife = () => {
             <style>{`video { width: 100%; height: 100%; object-fit: cover; }`}</style>
           </div>
 
-          {/* Features Grid (50%) - Aquí aprovechamos el espacio al lado del video */}
+          {/* Features Grid (50%) */}
           <div className="lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center bg-white dark:bg-gray-800">
             <h3 className="text-2xl font-bold mb-6 text-blue-900 dark:text-white">¿Por qué elegir MetLife?</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -114,8 +116,8 @@ export const MetLife = () => {
           </div>
         </div>
 
-        {/* Product Cards */}
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
+        {/* Product Cards - Solo 2 productos */}
+        <div className="grid md:grid-cols-2 gap-6 mb-12 max-w-4xl mx-auto">
           {products.map((product, index) => (
             <motion.div
               key={product.name}
