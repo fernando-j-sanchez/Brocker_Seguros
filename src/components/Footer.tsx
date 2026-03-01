@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Phone, Mail, MapPin, Send, Facebook, Instagram, Linkedin, CheckCircle } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
 export const Footer = () => {
   const [formData, setFormData] = useState({
@@ -12,25 +13,52 @@ export const Footer = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrorMessage('');
     
-    // Simular envío a base de datos
-    setTimeout(() => {
+    try {
+      // 1. Guardar en Supabase
+      const { data, error } = await supabase
+        .from('contact_leads')
+        .insert([
+          {
+            nombre: formData.nombre,
+            email: formData.email,
+            telefono: formData.telefono,
+            producto: formData.producto,
+            mensaje: formData.mensaje
+          }
+        ]);
+      
+      if (error) {
+        console.error('❌ Error de Supabase:', error);
+        setErrorMessage(`Error: ${error.message}`);
+      } else {
+        console.log('✅ Guardado en Supabase:', data);
+        setShowSuccess(true);
+        
+        // Limpiar formulario
+        setFormData({
+          nombre: '',
+          email: '',
+          telefono: '',
+          producto: 'allianz',
+          mensaje: ''
+        });
+        
+        // Ocultar mensaje de éxito después de 3 segundos
+        setTimeout(() => setShowSuccess(false), 3000);
+      }
+    } catch (err) {
+      console.error('💥 Error inesperado:', err);
+      setErrorMessage('Error de conexión. Intenta de nuevo.');
+    } finally {
       setIsSubmitting(false);
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 3000);
-      console.log('Lead:', formData);
-      setFormData({
-        nombre: '',
-        email: '',
-        telefono: '',
-        producto: 'allianz',
-        mensaje: ''
-      });
-    }, 1500);
+    }
   };
 
   // Variants
@@ -248,13 +276,24 @@ export const Footer = () => {
                 />
               </motion.div>
 
+              {/* Mensaje de error si existe */}
+              {errorMessage && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="p-3 bg-red-500/20 border border-red-500 rounded-lg text-red-500 text-sm"
+                >
+                  {errorMessage}
+                </motion.div>
+              )}
+
               <motion.button
                 type="submit"
                 variants={itemVariants}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 disabled={isSubmitting}
-                className="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2 group relative overflow-hidden"
+                className="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2 group relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <span className="relative z-10 flex items-center gap-2">
                   {isSubmitting ? (

@@ -105,32 +105,35 @@ export const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo con animación */}
-          <motion.a 
-            href="#" 
-            className="flex items-center space-x-2"
-            variants={logoVariants}
-            initial="hidden"
-            animate="visible"
-            whileHover="hover"
-          >
-            <motion.div
-              animate={{ rotate: [0, 360] }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            >
-              <Shield className="w-8 h-8 text-blue-600" />
-            </motion.div>
-            <motion.span 
-              className="text-xl font-bold text-gray-900 dark:text-white"
-              animate={{ 
-                textShadow: isDark 
-                  ? ['0 0 5px #3b82f6', '0 0 10px #3b82f6', '0 0 5px #3b82f6']
-                  : 'none'
-              }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              NISSI
-            </motion.span>
-          </motion.a>
+// Busca la sección del logo y cámbiala por esto:
+<motion.a 
+  href="#" 
+  className="flex items-center space-x-2 group"
+  variants={logoVariants}
+  initial="hidden"
+  animate="visible"
+  whileHover={{ scale: 1.05 }}
+>
+  <motion.div
+    animate={{ 
+      color: isDark ? '#FFD700' : '#2563eb',
+      filter: isDark ? 'drop-shadow(0 0 5px #FFD700)' : 'none'
+    }}
+    transition={{ duration: 0.5 }}
+  >
+    <Shield className="w-8 h-8 transition-colors duration-300 group-hover:text-yellow-500" />
+  </motion.div>
+  <motion.span 
+    className="text-xl font-bold text-gray-900 dark:text-white"
+    animate={{ 
+      color: isDark ? '#FFD700' : '#111827',
+      textShadow: isDark ? '0 0 5px #FFD700' : 'none'
+    }}
+    transition={{ duration: 0.5 }}
+  >
+    NISSI
+  </motion.span>
+</motion.a>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">

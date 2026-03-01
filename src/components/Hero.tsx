@@ -4,10 +4,38 @@ import { TrendingUp, Heart, Home, Car, ArrowRight } from 'lucide-react';
 
 export const Hero = () => {
   const services = [
-    { icon: TrendingUp, title: 'PPR Allianz', color: 'bg-blue-50 dark:bg-blue-900/20', textColor: 'text-blue-600', delay: 0.4 },
-    { icon: Heart, title: 'Vida MetLife', color: 'bg-green-50 dark:bg-green-900/20', textColor: 'text-green-600', delay: 0.5 },
-    { icon: Home, title: 'Hogar Mapfre', color: 'bg-red-50 dark:bg-red-900/20', textColor: 'text-red-600', delay: 0.6 },
-    { icon: Car, title: 'Autos', color: 'bg-purple-50 dark:bg-purple-900/20', textColor: 'text-purple-600', delay: 0.7 }
+    { 
+      icon: TrendingUp, 
+      title: 'PPR Allianz', 
+      color: 'bg-blue-50 dark:bg-blue-900/20', 
+      textColor: 'text-blue-600',
+      href: '#allianz',
+      delay: 0.4 
+    },
+    { 
+      icon: Heart, 
+      title: 'Vida MetLife', 
+      color: 'bg-green-50 dark:bg-green-900/20', 
+      textColor: 'text-green-600',
+      href: '#metlife',
+      delay: 0.5 
+    },
+    { 
+      icon: Home, 
+      title: 'Hogar Mapfre', 
+      color: 'bg-red-50 dark:bg-red-900/20', 
+      textColor: 'text-red-600',
+      href: '#mapfre',
+      delay: 0.6 
+    },
+    { 
+      icon: Car, 
+      title: 'Autos', 
+      color: 'bg-purple-50 dark:bg-purple-900/20', 
+      textColor: 'text-purple-600',
+      href: '#mapfre', // Autos lleva a Mapfre
+      delay: 0.7 
+    }
   ];
 
   // Variants
@@ -37,11 +65,6 @@ export const Hero = () => {
       scale: 1, 
       opacity: 1,
       transition: { type: "spring", stiffness: 200, delay: 0.2 }
-    },
-    hover: { 
-      scale: 1.05,
-      boxShadow: "0 10px 25px -5px rgba(37,99,235,0.3)",
-      transition: { type: "spring", stiffness: 400 }
     }
   };
 
@@ -54,11 +77,13 @@ export const Hero = () => {
     }),
     hover: { 
       scale: 1.05,
-      boxShadow: "0 20px 25px -5px rgba(0,0,0,0.1)",
       transition: { type: "spring", stiffness: 400 }
     },
     tap: { scale: 0.95 }
   };
+
+  // Estado para el color del texto "lo que más te importa"
+  const [hoverColor, setHoverColor] = React.useState('text-blue-600');
 
   return (
     <section className="pt-24 pb-16 px-4 relative overflow-hidden">
@@ -95,10 +120,9 @@ export const Hero = () => {
       >
         <motion.span
           variants={badgeVariants}
-          whileHover="hover"
           className="inline-block px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full text-sm font-medium mb-6"
         >
-          Tu broker de seguros de confianza
+          NISSI - Tu broker de seguros de confianza
         </motion.span>
         
         <motion.h1
@@ -107,12 +131,9 @@ export const Hero = () => {
         >
           Protegemos{' '}
           <motion.span 
-            className="text-blue-600 inline-block"
-            animate={{ 
-              scale: [1, 1.05, 1],
-              rotate: [0, 2, -2, 0]
-            }}
-            transition={{ duration: 3, repeat: Infinity }}
+            className={hoverColor}
+            animate={{ color: hoverColor }}
+            transition={{ duration: 0.5 }}
           >
             lo que más te importa
           </motion.span>
@@ -129,27 +150,32 @@ export const Hero = () => {
           variants={itemVariants}
           className="flex flex-wrap justify-center gap-4 mb-12"
         >
-          {['PPR Allianz', 'MetLife', 'Mapfre'].map((text, i) => {
-            const colors = ['blue', 'green', 'red'];
-            return (
-              <motion.button
-                key={text}
-                custom={i}
-                variants={buttonVariants}
-                whileHover="hover"
-                whileTap="tap"
-                className={`px-6 py-3 bg-${colors[i]}-600 text-white rounded-lg hover:bg-${colors[i]}-700 transition-colors font-medium relative overflow-hidden group`}
-              >
-                <span className="relative z-10">{text}</span>
-                <motion.div 
-                  className={`absolute inset-0 bg-${colors[i]}-400`}
-                  initial={{ x: '-100%' }}
-                  whileHover={{ x: 0 }}
-                  transition={{ duration: 0.3 }}
-                />
-              </motion.button>
-            );
-          })}
+          {/* Botones principales con hover que cambian el color del texto */}
+          {[
+            { text: 'PPR Allianz', color: 'blue', href: '#allianz' },
+            { text: 'MetLife', color: 'green', href: '#metlife' },
+            { text: 'Mapfre', color: 'red', href: '#mapfre' }
+          ].map((item, i) => (
+            <motion.a
+              key={item.text}
+              href={item.href}
+              custom={i}
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
+              onHoverStart={() => setHoverColor(`text-${item.color}-600`)}
+              onHoverEnd={() => setHoverColor('text-blue-600')}
+              className={`px-6 py-3 bg-${item.color}-600 text-white rounded-lg hover:bg-${item.color}-700 transition-colors font-medium relative overflow-hidden group cursor-pointer`}
+            >
+              <span className="relative z-10">{item.text}</span>
+              <motion.div 
+                className={`absolute inset-0 bg-${item.color}-400`}
+                initial={{ x: '-100%' }}
+                whileHover={{ x: 0 }}
+                transition={{ duration: 0.3 }}
+              />
+            </motion.a>
+          ))}
         </motion.div>
 
         <motion.div 
@@ -157,8 +183,9 @@ export const Hero = () => {
           variants={itemVariants}
         >
           {services.map((service) => (
-            <motion.div
+            <motion.a
               key={service.title}
+              href={service.href}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: service.delay }}
@@ -167,6 +194,8 @@ export const Hero = () => {
                 scale: 1.02,
                 boxShadow: "0 20px 25px -5px rgba(0,0,0,0.1)"
               }}
+              onHoverStart={() => setHoverColor(service.textColor)}
+              onHoverEnd={() => setHoverColor('text-blue-600')}
               className={`${service.color} p-4 rounded-xl text-center cursor-pointer relative overflow-hidden group`}
             >
               <motion.div 
@@ -177,7 +206,7 @@ export const Hero = () => {
               />
               <service.icon className={`w-8 h-8 mx-auto mb-2 ${service.textColor} group-hover:scale-110 transition-transform`} />
               <span className={`text-sm font-medium ${service.textColor}`}>{service.title}</span>
-            </motion.div>
+            </motion.a>
           ))}
         </motion.div>
 
