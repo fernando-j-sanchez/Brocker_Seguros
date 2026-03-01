@@ -1,6 +1,6 @@
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-// ✅ Modelo más estable y universal
-const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent';
+// Usamos v1 (Estable) y el modelo 1.5 Flash (Rápido y gratis)
+const API_URL = 'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent';
 
 const SYSTEM_PROMPT = `Eres "Asistente NISSI", un asistente virtual amable y profesional de un broker de seguros mexicano llamado NISSI. 
 Tus respuestas deben ser cálidas, usar emojis y mantener un tono profesional.
@@ -15,48 +15,41 @@ export async function getChatResponse(messages: { role: 'user' | 'assistant', co
   if (!API_KEY) return "Error: Configura la API Key en Vercel.";
 
   try {
-    // 🔍 Verificar modelos disponibles (temporal)
-    const testResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${API_KEY}`);
-    const testData = await testResponse.json();
-    console.log('📋 Modelos a los que tienes acceso:', testData);
-
-    const contents = messages.map(msg => ({
+    // Formateamos el historial correctamente para Gemini
+    const history = messages.map(msg => ({
       role: msg.role === 'user' ? 'user' : 'model',
       parts: [{ text: msg.content }]
     }));
 
-    // Versión SIMPLIFICADA (sin system_instruction que a veces falla)
-    const requestBody = {
-      contents: [
-        {
-          role: 'user',
-          parts: [{ text: `${SYSTEM_PROMPT}\n\nHistorial:\n${JSON.stringify(messages)}` }]
-        }
-      ],
-      generationConfig: {
-        temperature: 0.7,
-        maxOutputTokens: 500,
-      }
-    };
-
     const response = await fetch(`${API_URL}?key=${API_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(requestBody)
+      body: JSON.stringify({
+        contents: [
+          {
+            role: 'user',
+            parts: [{ text: `INSTRUCCIONES: ${SYSTEM_PROMPT}` }]
+          },
+          ...history
+        ],
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 500,
+        }
+      })
     });
 
     const data = await response.json();
-    console.log('✅ Respuesta de Gemini:', data);
 
     if (!response.ok) {
-      console.error("🚨 Error completo:", data);
-      return `Error ${response.status}: ${data.error?.message || 'Desconocido'}`;
+      console.error("🚨 Error de Google:", data);
+      return `Error ${response.status}: ${data.error?.message || 'Fallo en API'}`;
     }
 
     return data.candidates?.[0]?.content?.parts?.[0]?.text || "No pude generar respuesta.";
 
   } catch (error) {
-    console.error('❌ Error:', error);
+    console.error('❌ Error en el servicio:', error);
     return "Hola, soy NISSI. Tuve un detalle técnico, ¿podrías repetir tu duda?";
   }
 }
