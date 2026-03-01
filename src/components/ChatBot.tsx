@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, User, Bot, Sparkles } from 'lucide-react';
-import { getChatResponse } from '../services/openai-service';
-
+import { getChatResponse } from '../services/gemini-service';
 interface Message {
   role: 'user' | 'assistant';
   content: string;
