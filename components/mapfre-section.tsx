@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
-import { Shield, DollarSign, FileText, Info, Building2, Home, ShieldAlert, Car, GraduationCap } from "lucide-react"
+import { Shield, DollarSign, FileText, Info, Building2, Home, ShieldAlert, Car, Baby, Award, GraduationCap } from "lucide-react"
 
 export function MapfreSection() {
   const scrollToContact = () => {
@@ -154,7 +154,7 @@ export function MapfreSection() {
               </CardContent>
             </Card>
 
-            {/* SUPERACIÓN PLUS - NUEVO NOMBRE */}
+            {/* SUPERACIÓN PLUS - Corregido con icono de Graduación */}
             <Card className="border-2 hover:border-primary/50 transition-colors">
               <CardHeader>
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
@@ -172,25 +172,25 @@ export function MapfreSection() {
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
                     <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Plan de ahorro diseñado especialmente para la educación de tus hijos</span>
+                    <span className="text-sm text-muted-foreground">Ahorro diseñado especialmente para educación</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Garantiza su futuro académico y profesional</span>
+                    <span className="text-sm text-muted-foreground">Protección de vida desde temprana edad</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Protección de vida incluida desde temprana edad</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Flexibilidad en aportaciones y plazos</span>
+                    <span className="text-sm text-muted-foreground">Asegura su futuro académico y profesional</span>
                   </li>
                 </ul>
+                <div className="mt-4 flex items-center gap-2 text-sm text-primary">
+                  <Award className="w-4 h-4" />
+                  <span>Incluye beneficios educativos adicionales</span>
+                </div>
               </CardContent>
             </Card>
 
-            {/* Protección Digital 360 - Ocupa 2 columnas en md */}
+            {/* Protección Digital 360 */}
             <Card className="border-2 border-primary hover:border-primary/70 transition-colors bg-primary/5 md:col-span-2">
               <CardHeader>
                 <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center mb-2">
@@ -257,8 +257,7 @@ export function MapfreSection() {
                   <AccordionContent>
                     <p className="text-muted-foreground leading-relaxed">
                       Es el pago periódico (mensual, trimestral o anual) que realizas a la aseguradora para mantener
-                      activa tu póliza. A cambio de este pago, la aseguradora se compromete a protegerte ante los
-                      siniestros cubiertos en tu contrato.
+                      activa tu póliza.
                     </p>
                   </AccordionContent>
                 </AccordionItem>
@@ -272,9 +271,7 @@ export function MapfreSection() {
                   </AccordionTrigger>
                   <AccordionContent>
                     <p className="text-muted-foreground leading-relaxed">
-                      Es la cantidad fija que tú pagas de tu bolsillo antes de que el seguro comience a cubrir los
-                      gastos. Por ejemplo, si tu deducible es de $15,000 y tienes gastos médicos por $50,000, tú pagas
-                      los primeros $15,000 y el seguro cubre el resto (sujeto al coaseguro si aplica).
+                      Es la cantidad fija que tú pagas antes de que el seguro comience a cubrir los gastos.
                     </p>
                   </AccordionContent>
                 </AccordionItem>
@@ -288,9 +285,7 @@ export function MapfreSection() {
                   </AccordionTrigger>
                   <AccordionContent>
                     <p className="text-muted-foreground leading-relaxed">
-                      Es el porcentaje de los gastos que tú pagas después del deducible. Comúnmente es 10% o 20%.
-                      Siguiendo el ejemplo anterior: después de tu deducible de $15,000, quedan $35,000. Si tu coaseguro
-                      es del 10%, pagas $3,500 adicionales y el seguro cubre $31,500. Tu total a pagar sería $18,500.
+                      Es el porcentaje de los gastos que pagas después del deducible.
                     </p>
                   </AccordionContent>
                 </AccordionItem>
@@ -304,9 +299,7 @@ export function MapfreSection() {
                   </AccordionTrigger>
                   <AccordionContent>
                     <p className="text-muted-foreground leading-relaxed">
-                      Es el monto máximo que la aseguradora pagará por concepto de reclamaciones cubiertas durante la
-                      vigencia de tu póliza. En seguros de vida, es la cantidad que recibirán tus beneficiarios. En GMM,
-                      es el límite anual de cobertura para gastos médicos. En Superación Plus, es el monto que se entregará para la educación de tus hijos.
+                      Es el monto máximo que la aseguradora pagará por reclamaciones cubiertas.
                     </p>
                   </AccordionContent>
                 </AccordionItem>
@@ -317,10 +310,10 @@ export function MapfreSection() {
           {/* CTA Final */}
           <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-8 md:p-12 text-center border border-primary/20">
             <h3 className="font-display font-bold text-2xl md:text-3xl mb-4 text-foreground">
-              Soluciones Mapfre para personas y negocios
+              Soluciones Mapfre para ti y tu familia
             </h3>
             <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-              Desde protección médica hasta ahorro educativo con Superación Plus, nuestros asesores te ayudarán a encontrar la mejor opción para ti y tu familia
+              Desde autos hasta Superación Plus, tenemos la protección perfecta para cada etapa de tu vida
             </p>
             <Button
               size="lg"

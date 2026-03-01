@@ -64,6 +64,29 @@ export const MetLife = () => {
         { icon: ThumbsUp, label: 'Fácil' }
       ]
     }
+    // En la sección de features de MetLife, podemos expandir:
+const features = [
+  {
+    icon: Shield,
+    title: "Protección integral",
+    description: "Cobertura completa para ti y tu familia en situaciones inesperadas. Incluye respaldo internacional."
+  },
+  {
+    icon: Heart,
+    title: "Seguro de vida",
+    description: "Garantiza el bienestar económico de tus seres queridos siempre. Hasta 20 coberturas adicionales."
+  },
+  {
+    icon: Users,
+    title: "Plan familiar",
+    description: "Toda tu familia bajo una sola póliza con beneficios extendidos para cónyuge e hijos."
+  },
+  {
+    icon: Gift,
+    title: "Beneficios exclusivos",
+    description: "Acceso a programas de bienestar, descuentos en salud y servicios de asistencia 24/7."
+  }
+];
   ];
 
   const handleContactClick = () => {
