@@ -6,7 +6,7 @@ import { MetLife } from './components/MetLife'
 import { Mapfre } from './components/Mapfre'
 import { Testimonios } from './components/Testimonios'
 import { WhatsAppButton } from './components/WhatsAppButton'
-//import { ChatBot } from './components/ChatBot'
+import { ChatBot } from './components/ChatBot'
 import { Footer } from './components/Footer'
 
 function App() {
