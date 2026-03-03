@@ -5,8 +5,9 @@ import { AllianzPPR } from './components/AllianzPPR'
 import { MetLife } from './components/MetLife'
 import { Mapfre } from './components/Mapfre'
 import { Testimonios } from './components/Testimonios'
-import { WhatsAppButton } from './components/WhatsAppButton'
-import { ChatBot } from './components/ChatBot'
+// IMPORTS COMENTADOS (los que ya no usas)
+// import { WhatsAppButton } from './components/WhatsAppButton'
+// import { ChatBot } from './components/ChatBot'
 import { Footer } from './components/Footer'
 
 function App() {
@@ -21,8 +22,10 @@ function App() {
         <Testimonios />
       </main>
       <Footer />
-      <WhatsAppButton />
-      <ChatBot />
+      
+      {/* COMPONENTES OCULTOS (comentados) */}
+      {/* <WhatsAppButton /> */}
+      {/* <ChatBot /> */}
     </div>
   )
 }
