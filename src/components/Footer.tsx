@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Phone, Mail, MapPin, Send, Facebook, Instagram, Linkedin, CheckCircle } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { guardarLead } from '../lib/leads';
 
 export const Footer = () => {
   const [formData, setFormData] = useState({
@@ -21,24 +21,11 @@ export const Footer = () => {
     setErrorMessage('');
     
     try {
-      // 1. Guardar en Supabase
-      const { data, error } = await supabase
-        .from('contact_leads')
-        .insert([
-          {
-            nombre: formData.nombre,
-            email: formData.email,
-            telefono: formData.telefono,
-            producto: formData.producto,
-            mensaje: formData.mensaje
-          }
-        ]);
-      
-      if (error) {
-        console.error('❌ Error de Supabase:', error);
-        setErrorMessage(`Error: ${error.message}`);
+      const guardado = await guardarLead({ origen: 'formulario', ...formData });
+
+      if (!guardado) {
+        setErrorMessage('No pudimos enviar tu solicitud. Intenta de nuevo o escríbenos por WhatsApp.');
       } else {
-        console.log('✅ Guardado en Supabase:', data);
         setShowSuccess(true);
         
         // Limpiar formulario
@@ -54,7 +41,7 @@ export const Footer = () => {
         setTimeout(() => setShowSuccess(false), 3000);
       }
     } catch (err) {
-      console.error('💥 Error inesperado:', err);
+      console.error('Error inesperado:', err);
       setErrorMessage('Error de conexión. Intenta de nuevo.');
     } finally {
       setIsSubmitting(false);

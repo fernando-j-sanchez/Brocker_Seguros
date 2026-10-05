@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { VideoPlayer } from './VideoPlayer';
+import { whatsappUrl } from '../lib/contacto';
 import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area } from 'recharts';
-import { ChevronDown, ChevronUp, DollarSign, TrendingUp, PiggyBank, MessageCircle } from 'lucide-react';
+import { ChevronDown, ChevronUp, DollarSign, TrendingUp, PiggyBank, MessageCircle, CheckCircle2 } from 'lucide-react';
 
 export const AllianzPPR = () => {
   const [age, setAge] = useState<number>(30);
@@ -104,9 +104,46 @@ export const AllianzPPR = () => {
 
         {/* Card Principal: Video + Formulario */}
         <div className="flex flex-col lg:flex-row overflow-hidden rounded-3xl shadow-2xl bg-white dark:bg-gray-800 border dark:border-gray-700 mb-8">
-          <div className="lg:w-1/2 relative bg-black min-h-[350px]">
-            <VideoPlayer videoSrc="/videos/All1.mp4" />
-            <style>{`video { width: 100%; height: 100%; object-fit: cover; }`}</style>
+          {/* Panel de beneficios (reemplaza el video de la campaña olímpica, que ya terminó).
+              Si llega un video nuevo de Allianz, se puede volver a usar <VideoPlayer videoSrc="/videos/archivo.mp4" />. */}
+          <div className="lg:w-1/2 relative min-h-[350px] overflow-hidden bg-gradient-to-br from-[#003781] via-blue-800 to-blue-600 text-white p-8 sm:p-10 flex flex-col justify-between">
+            <div aria-hidden="true" className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-white/10 blur-2xl" />
+            <div aria-hidden="true" className="absolute -bottom-32 -left-16 w-80 h-80 rounded-full bg-sky-400/20 blur-3xl" />
+
+            <div className="relative">
+              <span className="inline-block px-3 py-1 rounded-full bg-white/15 text-xs font-semibold tracking-wide uppercase">Plan Personal de Retiro</span>
+              <h3 className="mt-4 text-3xl sm:text-4xl font-black leading-tight">Tu retiro,<br />en tus manos.</h3>
+              <p className="mt-3 text-blue-100 max-w-sm">Empieza hoy y deja que el interés compuesto trabaje para ti.</p>
+            </div>
+
+            {/* Barras de crecimiento animadas */}
+            <div aria-hidden="true" className="relative flex items-end gap-2 h-24 my-6">
+              {[18, 26, 34, 45, 58, 72, 88, 100].map((h, i) => (
+                <motion.div
+                  key={i}
+                  className="flex-1 rounded-t-md bg-gradient-to-t from-white/25 to-white/70"
+                  initial={{ height: 0 }}
+                  whileInView={{ height: `${h}%` }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.15 + i * 0.08, duration: 0.6, ease: 'easeOut' }}
+                />
+              ))}
+            </div>
+
+            <ul className="relative grid sm:grid-cols-2 gap-3 text-sm">
+              {[
+                'Aportaciones deducibles de impuestos*',
+                'Plazo desde 10 años',
+                'Tú decides cuánto aportar',
+                'Respaldo de Allianz'
+              ].map((beneficio) => (
+                <li key={beneficio} className="flex items-start gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-sky-300 flex-shrink-0" />
+                  <span>{beneficio}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="relative mt-4 text-[11px] text-blue-200">*Dentro de los límites que marca la ley. Tu asesor te confirma tu caso.</p>
           </div>
 
           <div className="lg:w-1/2 p-8 flex flex-col justify-center">
@@ -183,9 +220,9 @@ export const AllianzPPR = () => {
               Quiero empezar mi plan de retiro
             </button>
             <a 
-              href="https://wa.me/5559515885" 
+              href={whatsappUrl(`Hola, me interesa el PPR Allianz. Tengo ${age} años y me gustaría ahorrar $${monthly.toLocaleString('es-MX')} al mes para retirarme a los ${retirementAge}.`)} 
               target="_blank" 
-              rel="noreferrer" 
+              rel="noopener noreferrer" 
               className="flex items-center justify-center gap-2 w-full py-3 bg-green-500 text-white rounded-xl font-bold hover:bg-green-600 transition-all"
             >
               <MessageCircle size={18} /> Contactar Asesor

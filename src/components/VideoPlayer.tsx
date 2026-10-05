@@ -5,7 +5,7 @@ interface VideoPlayerProps {
   videoSrc?: string;
 }
 
-export const VideoPlayer = ({ videoSrc = '/videos/All1.mp4' }: VideoPlayerProps) => {
+export const VideoPlayer = ({ videoSrc = '/videos/All2.mp4' }: VideoPlayerProps) => {
   const [muted, setMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
 
