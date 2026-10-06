@@ -130,13 +130,9 @@ export const Hero = () => {
           className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6"
         >
           Protegemos{' '}
-          <motion.span 
-            className={hoverColor}
-            animate={{ color: hoverColor }}
-            transition={{ duration: 0.5 }}
-          >
+          <span className={`${hoverColor} transition-colors duration-500`}>
             lo que más te importa
-          </motion.span>
+          </span>
         </motion.h1>
         
         <motion.p
@@ -151,10 +147,11 @@ export const Hero = () => {
           className="flex flex-wrap justify-center gap-4 mb-12"
         >
           {/* Botones principales con hover que cambian el color del texto */}
+          {/* Clases completas (no armadas con `bg-${color}`) para que Tailwind las genere */}
           {[
-            { text: 'PPR Allianz', color: 'blue', href: '#allianz' },
-            { text: 'MetLife', color: 'green', href: '#metlife' },
-            { text: 'Mapfre', color: 'red', href: '#mapfre' }
+            { text: 'PPR Allianz', href: '#allianz', texto: 'text-blue-600', boton: 'bg-blue-600 hover:bg-blue-700', brillo: 'bg-blue-400' },
+            { text: 'MetLife', href: '#metlife', texto: 'text-green-600', boton: 'bg-green-600 hover:bg-green-700', brillo: 'bg-green-400' },
+            { text: 'Mapfre', href: '#mapfre', texto: 'text-red-600', boton: 'bg-red-600 hover:bg-red-700', brillo: 'bg-red-400' }
           ].map((item, i) => (
             <motion.a
               key={item.text}
@@ -163,13 +160,13 @@ export const Hero = () => {
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
-              onHoverStart={() => setHoverColor(`text-${item.color}-600`)}
+              onHoverStart={() => setHoverColor(item.texto)}
               onHoverEnd={() => setHoverColor('text-blue-600')}
-              className={`px-6 py-3 bg-${item.color}-600 text-white rounded-lg hover:bg-${item.color}-700 transition-colors font-medium relative overflow-hidden group cursor-pointer`}
+              className={`px-6 py-3 ${item.boton} text-white rounded-lg transition-colors font-medium relative overflow-hidden group cursor-pointer`}
             >
               <span className="relative z-10">{item.text}</span>
               <motion.div 
-                className={`absolute inset-0 bg-${item.color}-400`}
+                className={`absolute inset-0 ${item.brillo}`}
                 initial={{ x: '-100%' }}
                 whileHover={{ x: 0 }}
                 transition={{ duration: 0.3 }}

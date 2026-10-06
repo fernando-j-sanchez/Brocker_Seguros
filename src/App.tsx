@@ -5,9 +5,8 @@ import { AllianzPPR } from './components/AllianzPPR'
 import { MetLife } from './components/MetLife'
 import { Mapfre } from './components/Mapfre'
 import { Testimonios } from './components/Testimonios'
-// IMPORTS COMENTADOS (solo el ChatBot)
-import { WhatsAppButton } from './components/WhatsAppButton'  // ← ESTE SÍ
-// import { ChatBot } from './components/ChatBot'  // ← ESTE NO
+import { WhatsAppButton } from './components/WhatsAppButton'
+import { AsistenteNissi } from './components/AsistenteNissi'
 import { Footer } from './components/Footer'
 
 function App() {
@@ -22,10 +21,10 @@ function App() {
         <Testimonios />
       </main>
       <Footer />
-      
-      {/* WhatsApp SÍ, ChatBot NO */}
-      <WhatsAppButton />  {/* ← ESTO SE VE */}
-      {/* <ChatBot /> */}  {/* ← ESTO NO */}
+
+      {/* Botones flotantes: asistente a la izquierda, WhatsApp a la derecha */}
+      <AsistenteNissi />
+      <WhatsAppButton />
     </div>
   )
 }

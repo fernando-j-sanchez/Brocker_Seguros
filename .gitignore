@@ -1,32 +1,19 @@
-<<<<<<< HEAD
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Dependencias
+node_modules
 
-# dependencies
-/node_modules
+# Build
+dist
+dist-ssr
+*.local
 
-# next.js
-/.next/
-/out/
+# Variables de entorno (claves de Supabase, Gemini, etc. NUNCA se suben)
+.env
+.env.*
+!.env.example
 
-# production
-/build
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# env files
-.env*
-
-# vercel
+# Vercel
 .vercel
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-=======
 # Logs
 logs
 *.log
@@ -34,21 +21,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
+# Editor / sistema
 .vscode/*
 !.vscode/extensions.json
 .idea
 .DS_Store
 *.suo
-*.ntvs*
-*.njsproj
-*.sln
 *.sw?
->>>>>>> 53b19eb (Actualización Mapfre y correcciones de diseño)
+*.tsbuildinfo

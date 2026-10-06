@@ -1,10 +1,12 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('❌ Faltan variables de entorno de Supabase');
+  console.warn('Faltan variables de entorno de Supabase; los datos solo se enviarán a Google Sheets.');
 }
 
-export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '')
+// Si faltan las variables no se crea el cliente (createClient con URL vacía rompe toda la página).
+export const supabase: SupabaseClient | null =
+  supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null

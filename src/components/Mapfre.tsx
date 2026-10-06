@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Car, Home, Building2, Heart, Shield, Wifi, Globe, Database, Info, Truck, Send, CheckCircle, X } from 'lucide-react';
+import { Car, Home, Building2, Heart, Shield, Wifi, Globe, Database, Info, Truck, Send, CheckCircle, X, AlertCircle, MessageCircle } from 'lucide-react';
+import { guardarLead } from '../lib/leads';
+import { whatsappUrl } from '../lib/contacto';
 
 export const Mapfre = () => {
   const [formData, setFormData] = useState({
@@ -8,10 +10,14 @@ export const Mapfre = () => {
     marca: '',
     modelo: '',
     ano: new Date().getFullYear(),
-    cobertura: 'amplia'
+    cobertura: 'amplia',
+    nombre: '',
+    telefono: '',
+    email: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showCotizacion, setShowCotizacion] = useState(false);
+  const [guardado, setGuardado] = useState(true);
 
   const products = [
     { icon: Car, title: 'Autos Flotilla (Pyme)', desc: 'Precio especial para empresas', color: 'red' },
@@ -34,24 +40,66 @@ export const Mapfre = () => {
     { term: 'Suma Asegurada', desc: 'Monto máximo de cobertura' }
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const nombresCobertura: Record<string, string> = {
+    amplia: 'Amplia',
+    limitada: 'Limitada',
+    rc: 'Responsabilidad Civil'
+  };
+
+  const beneficiosCobertura: Record<string, string[]> = {
+    amplia: [
+      'Daños materiales por colisión, vuelco o caída',
+      'Robo total del vehículo',
+      'Responsabilidad civil por daños a terceros',
+      'Gastos médicos ocupantes',
+      'Asistencia vial 24/7',
+      'Auto sustituto'
+    ],
+    limitada: [
+      'Robo total del vehículo',
+      'Responsabilidad civil por daños a terceros',
+      'Gastos médicos ocupantes',
+      'Asistencia vial 24/7'
+    ],
+    rc: [
+      'Daños a terceros en sus bienes',
+      'Daños a terceros en sus personas',
+      'Asesoría legal en caso de accidente'
+    ]
+  };
+
+  const resumenFlotilla = () =>
+    `${formData.vehiculos}${formData.vehiculos >= 10 ? '+' : ''} vehículos - ${formData.marca || 'Marca sin especificar'} ${formData.modelo} ${formData.ano} - Cobertura ${nombresCobertura[formData.cobertura]}`.replace(/\s+/g, ' ');
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setShowCotizacion(true);
-      console.log('Cotización:', formData);
-    }, 1500);
+
+    const ok = await guardarLead({
+      origen: 'cotizador-mapfre',
+      nombre: formData.nombre,
+      email: formData.email,
+      telefono: formData.telefono,
+      producto: 'Mapfre - Autos Flotilla',
+      mensaje: `Cotización de flotilla: ${resumenFlotilla()}`,
+      detalles: {
+        'Vehículos': formData.vehiculos >= 10 ? '10+' : formData.vehiculos,
+        'Marca': formData.marca,
+        'Modelo': formData.modelo,
+        'Año': formData.ano,
+        'Cobertura': nombresCobertura[formData.cobertura]
+      }
+    });
+
+    setGuardado(ok);
+    setIsSubmitting(false);
+    setShowCotizacion(true);
   };
 
   const handleCloseCotizacion = () => {
     setShowCotizacion(false);
   };
 
-  const handleSolicitarCotizacion = () => {
-    document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' });
-  };
 
   return (
     <section id="mapfre" className="py-16 px-4 bg-gray-50 dark:bg-gray-900 relative overflow-hidden">
@@ -308,6 +356,40 @@ export const Mapfre = () => {
                   </div>
                 </div>
 
+                {/* Datos de contacto: necesarios para que un asesor envíe la cotización */}
+                <div className="pt-2">
+                  <label className="block text-sm font-medium mb-2 dark:text-gray-300">Tus datos de contacto</label>
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    <input
+                      type="text"
+                      required
+                      value={formData.nombre}
+                      onChange={(e) => setFormData({...formData, nombre: e.target.value})}
+                      className="sm:col-span-2 w-full p-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:border-red-500 dark:bg-gray-700"
+                      placeholder="Nombre o empresa"
+                    />
+                    <input
+                      type="tel"
+                      required
+                      inputMode="tel"
+                      pattern="[0-9 +\-\(\)]{10,}"
+                      title="Escribe un teléfono de al menos 10 dígitos"
+                      value={formData.telefono}
+                      onChange={(e) => setFormData({...formData, telefono: e.target.value})}
+                      className="w-full p-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:border-red-500 dark:bg-gray-700"
+                      placeholder="Teléfono"
+                    />
+                    <input
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => setFormData({...formData, email: e.target.value})}
+                      className="w-full p-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:border-red-500 dark:bg-gray-700"
+                      placeholder="Correo electrónico"
+                    />
+                  </div>
+                </div>
+
                 {/* Botón Calcular Protección */}
                 <motion.button
                   type="submit"
@@ -323,12 +405,12 @@ export const Mapfre = () => {
                         animate={{ rotate: 360 }}
                         transition={{ duration: 1, repeat: Infinity }}
                       />
-                      Calculando...
+                      Enviando...
                     </>
                   ) : (
                     <>
                       <Send className="w-5 h-5" />
-                      Calcular Protección
+                      Obtener mi cotización
                     </>
                   )}
                 </motion.button>
@@ -382,8 +464,15 @@ export const Mapfre = () => {
                   </div>
                   
                   <p className="text-gray-600 dark:text-gray-400 mb-4">
-                    {formData.vehiculos} vehículos - {formData.marca || 'Marca'} {formData.modelo || 'Modelo'} {formData.ano}
+                    {resumenFlotilla()}
                   </p>
+
+                  {!guardado && (
+                    <div className="flex items-start gap-2 bg-amber-50 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 p-3 rounded-xl mb-4 text-sm">
+                      <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                      <span>No pudimos registrar tus datos automáticamente. Envíanos tu cotización por WhatsApp con el botón de abajo y te atendemos de inmediato.</span>
+                    </div>
+                  )}
 
                   <div className="bg-green-100 dark:bg-green-900/30 p-4 rounded-xl mb-4">
                     <div className="flex items-center gap-2 mb-2">
@@ -397,43 +486,21 @@ export const Mapfre = () => {
 
                   <div className="bg-white dark:bg-gray-700 rounded-xl p-4 mb-4 border border-gray-200 dark:border-gray-600">
                     <h4 className="font-bold text-lg mb-2 text-red-600">
-                      Cobertura {formData.cobertura === 'amplia' ? 'Amplia' : formData.cobertura === 'limitada' ? 'Limitada' : 'Responsabilidad Civil'}
+                      Cobertura {nombresCobertura[formData.cobertura]}
                     </h4>
                     <ul className="space-y-2">
-                      {formData.cobertura === 'amplia' && (
-                        <>
-                          <li className="text-sm flex items-start gap-2">
-                            <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                            <span>Daños materiales por colisión, vuelco o caída</span>
-                          </li>
-                          <li className="text-sm flex items-start gap-2">
-                            <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                            <span>Robo total del vehículo</span>
-                          </li>
-                          <li className="text-sm flex items-start gap-2">
-                            <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                            <span>Responsabilidad civil por daños a terceros</span>
-                          </li>
-                          <li className="text-sm flex items-start gap-2">
-                            <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                            <span>Gastos médicos ocupantes</span>
-                          </li>
-                          <li className="text-sm flex items-start gap-2">
-                            <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                            <span>Asistencia vial 24/7</span>
-                          </li>
-                          <li className="text-sm flex items-start gap-2">
-                            <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                            <span>Auto sustituto</span>
-                          </li>
-                        </>
-                      )}
+                      {beneficiosCobertura[formData.cobertura].map((beneficio) => (
+                        <li key={beneficio} className="text-sm flex items-start gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                          <span>{beneficio}</span>
+                        </li>
+                      ))}
                     </ul>
                   </div>
 
                   <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl mb-4">
                     <p className="text-sm text-blue-800 dark:text-blue-200">
-                      <span className="font-bold">Cotización Personalizada:</span> Tu flotilla está protegida. Un asesor te contactará con la cotización final personalizada según el perfil de tu flotilla.
+                      <span className="font-bold">Cotización Personalizada:</span> {guardado ? `¡Gracias, ${formData.nombre.split(' ')[0]}! Recibimos tus datos y un asesor te contactará con la cotización final según el perfil de tu flotilla.` : 'Un asesor te enviará la cotización final según el perfil de tu flotilla.'}
                     </p>
                     <p className="text-xs text-blue-600 dark:text-blue-300 mt-2 font-semibold">
                       Tarifas preferenciales para flotillas
@@ -444,14 +511,17 @@ export const Mapfre = () => {
                     <strong>Nota Importante:</strong> Las cotizaciones requieren evaluación individual de cada vehículo.
                   </p>
 
-                  <motion.button
-                    onClick={handleSolicitarCotizacion}
+                  <motion.a
+                    href={whatsappUrl(`Hola, soy ${formData.nombre}. Quiero cotizar mi flotilla con Mapfre: ${resumenFlotilla()}.`)}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full py-4 bg-red-600 text-white rounded-xl font-semibold text-lg shadow-lg hover:bg-red-700 transition-all"
+                    className="w-full py-4 bg-[#25D366] text-white rounded-xl font-semibold text-lg shadow-lg hover:bg-[#1ebe5b] transition-all flex items-center justify-center gap-2"
                   >
-                    Solicitar Cotización Personalizada
-                  </motion.button>
+                    <MessageCircle className="w-5 h-5" />
+                    {guardado ? 'Agilizar por WhatsApp' : 'Enviar por WhatsApp'}
+                  </motion.a>
                 </div>
               </motion.div>
             )}

@@ -36,3 +36,35 @@ body {
   @apply bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100;
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
+/* Carrusel infinito de testimonios */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.marquee-pista {
+  animation: marquee 70s linear infinite;
+}
+
+.marquee-reversa {
+  animation-direction: reverse;
+  animation-duration: 80s;
+}
+
+.marquee-contenedor:hover .marquee-pista {
+  animation-play-state: paused;
+}
+
+.marquee-mascara {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-pista {
+    animation: none;
+  }
+  .marquee-mascara {
+    overflow-x: auto;
+  }
+}
