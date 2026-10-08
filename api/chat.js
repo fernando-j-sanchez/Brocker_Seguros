@@ -1,7 +1,7 @@
 // Función serverless de Vercel: el "Asistente NISSI" responde con Gemini (Google AI, plan gratuito).
 // La clave GEMINI_API_KEY solo existe en el servidor; nunca llega al navegador.
 
-const MODELO = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+import { obtenerClaveGemini, modelosGemini, urlGemini, esModeloNoDisponible } from './_gemini.js';
 
 const INSTRUCCIONES = `Eres "Asistente NISSI", el asistente virtual de NISSI, un broker (agente) de seguros en la Ciudad de México.
 Hablas en español de México, con un tono cálido, cercano y profesional. Usa como máximo un emoji por mensaje.
@@ -44,7 +44,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Método no permitido' });
   }
 
-  const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
+  const apiKey = obtenerClaveGemini();
   if (!apiKey) {
     return res.status(503).json({ error: 'El asistente con IA no está configurado' });
   }
@@ -55,35 +55,41 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'No hay mensajes' });
   }
 
+  const peticion = JSON.stringify({
+    systemInstruction: { parts: [{ text: INSTRUCCIONES }] },
+    contents,
+    generationConfig: { temperature: 0.6, maxOutputTokens: 2048 },
+  });
+
   try {
-    const respuesta = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${MODELO}:generateContent`,
-      {
+    for (const modelo of modelosGemini()) {
+      const respuesta = await fetch(urlGemini(modelo, 'generateContent'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: INSTRUCCIONES }] },
-          contents,
-          generationConfig: { temperature: 0.6, maxOutputTokens: 2048 },
-        }),
+        body: peticion,
+      });
+      const datos = await respuesta.json().catch(() => ({}));
+
+      if (!respuesta.ok) {
+        console.error(`Error de Gemini (${modelo}):`, respuesta.status, JSON.stringify(datos).slice(0, 500));
+        if (esModeloNoDisponible(respuesta.status, datos)) continue;
+        return res.status(502).json({ error: 'El asistente no está disponible por ahora' });
       }
-    );
 
-    const datos = await respuesta.json().catch(() => ({}));
-    if (!respuesta.ok) {
-      console.error('Error de Gemini:', respuesta.status, JSON.stringify(datos).slice(0, 500));
-      return res.status(502).json({ error: 'El asistente no está disponible por ahora' });
+      const texto = (datos.candidates?.[0]?.content?.parts || [])
+        .filter((p) => !p.thought)
+        .map((p) => p.text || '')
+        .join('')
+        .trim();
+
+      if (!texto) {
+        console.error(`Gemini (${modelo}) devolvió una respuesta vacía:`, JSON.stringify(datos).slice(0, 500));
+        return res.status(502).json({ error: 'Respuesta vacía' });
+      }
+      return res.status(200).json({ reply: texto });
     }
 
-    const texto = (datos.candidates?.[0]?.content?.parts || [])
-      .map((p) => p.text || '')
-      .join('')
-      .trim();
-
-    if (!texto) {
-      return res.status(502).json({ error: 'Respuesta vacía' });
-    }
-    return res.status(200).json({ reply: texto });
+    return res.status(502).json({ error: 'Ningún modelo de Gemini está disponible' });
   } catch (error) {
     console.error('Error al llamar a Gemini:', error);
     return res.status(502).json({ error: 'El asistente no está disponible por ahora' });

@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ ok: false, error: 'Método no permitido' });
   }
 
-  const webhook = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+  const webhook = (process.env.GOOGLE_SHEETS_WEBHOOK_URL || '').trim();
   if (!webhook) {
     return res.status(503).json({ ok: false, error: 'Google Sheets no está configurado' });
   }

@@ -51,10 +51,6 @@ body {
   animation-duration: 80s;
 }
 
-.marquee-contenedor:hover .marquee-pista {
-  animation-play-state: paused;
-}
-
 .marquee-mascara {
   -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
   mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);

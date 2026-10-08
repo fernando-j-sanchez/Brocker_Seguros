@@ -148,7 +148,9 @@ export const AsistenteNissi = () => {
       const data = await res.json();
       if (!res.ok || !data.reply) throw new Error(data.error || `Error ${res.status}`);
       respuesta = data.reply;
-    } catch {
+    } catch (error) {
+      // Si la IA falla se usan respuestas preparadas; /api/estado muestra la causa.
+      console.warn('Asistente sin IA, usando respuestas preparadas:', error);
       respuesta = respuestaLocal(limpio);
     }
 

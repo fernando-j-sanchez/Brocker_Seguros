@@ -220,7 +220,7 @@ export const Testimonios = () => {
         </motion.div>
       </div>
 
-      {/* Dos filas que se desplazan en sentidos opuestos; se pausan al pasar el mouse */}
+      {/* Dos filas que se desplazan sin parar en sentidos opuestos */}
       <div className="marquee-contenedor space-y-6">
         {filas.map((fila, i) => (
           <div key={i} className="marquee-mascara overflow-hidden py-2">
