@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, Calculator, TrendingUp, Heart, Car, ShieldCheck, CheckCircle2, Clock } from 'lucide-react';
 import { Contador, SUAVE } from './Revelar';
+import { useSolicitud } from '../lib/solicitud';
 
 const coberturas = [
   { icono: TrendingUp, titulo: 'Retiro', marca: 'PPR Allianz', color: 'text-blue-600 bg-blue-50 dark:bg-blue-900/30', progreso: 78 },
@@ -18,6 +19,7 @@ const datos = [
 
 export const Hero = () => {
   const reducirMovimiento = useReducedMotion();
+  const { abrirSolicitud } = useSolicitud();
 
   const entrada = (retraso: number) => ({
     initial: { opacity: 0, y: reducirMovimiento ? 0 : 24 },
@@ -70,13 +72,21 @@ export const Hero = () => {
             </motion.p>
 
             <motion.div {...entrada(0.4)} className="mt-9 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-              <a
-                href="#contacto"
+              <button
+                onClick={() =>
+                  abrirSolicitud({
+                    producto: 'Cotización general',
+                    titulo: 'Cotiza sin costo',
+                    descripcion: 'Cuéntanos qué te interesa y un asesor te envía opciones de Allianz, MetLife y Mapfre.',
+                    seccion: 'Inicio',
+                    elegirProducto: true
+                  })
+                }
                 className="group inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-blue-600 text-white font-semibold shadow-lg shadow-blue-600/25 hover:bg-blue-700 hover:shadow-xl hover:shadow-blue-600/30 transition-all"
               >
                 Cotiza sin costo
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </a>
+              </button>
               <a
                 href="#allianz"
                 className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 font-semibold ring-1 ring-gray-200 dark:ring-gray-700 hover:ring-blue-300 hover:text-blue-700 dark:hover:text-blue-300 transition-all"

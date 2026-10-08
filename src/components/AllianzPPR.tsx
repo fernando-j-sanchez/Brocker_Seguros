@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { whatsappUrl } from '../lib/contacto';
 import { Revelar } from './Revelar';
+import { useSolicitud } from '../lib/solicitud';
 import { WhatsAppIcon } from './Iconos';
 import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { ChevronDown, ChevronUp, DollarSign, TrendingUp, PiggyBank, CheckCircle2 } from 'lucide-react';
 
 export const AllianzPPR = () => {
+  const { abrirSolicitud } = useSolicitud();
   const [age, setAge] = useState<number>(30);
   const [retirementAge, setRetirementAge] = useState<number>(65);
   const [years, setYears] = useState<number>(35); // Calculado: retirementAge - age
@@ -219,7 +221,21 @@ export const AllianzPPR = () => {
             )}
 
             <button 
-              onClick={() => document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' })} 
+              onClick={() =>
+                abrirSolicitud({
+                  producto: 'PPR Allianz',
+                  titulo: 'Empieza tu plan de retiro',
+                  descripcion: `Tu simulación: $${monthly.toLocaleString('es-MX')} al mes durante ${years} años, con un saldo estimado de $${totalFinal.toLocaleString('es-MX')}.`,
+                  seccion: 'Calculadora PPR',
+                  detalles: {
+                    'Edad actual': age,
+                    'Edad de retiro': retirementAge,
+                    'Aportación mensual': monthly,
+                    'Rendimiento estimado': `${rate}%`,
+                    'Saldo estimado': totalFinal
+                  }
+                })
+              } 
               disabled={!!validationError}
               className={`w-full py-4 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all mb-3 shadow-lg shadow-blue-100 ${validationError ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
