@@ -1,228 +1,194 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { TrendingUp, Heart, Home, Car, ArrowRight } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { ArrowRight, Calculator, TrendingUp, Heart, Car, ShieldCheck, CheckCircle2, Clock } from 'lucide-react';
+import { Contador, SUAVE } from './Revelar';
+
+const coberturas = [
+  { icono: TrendingUp, titulo: 'Retiro', marca: 'PPR Allianz', color: 'text-blue-600 bg-blue-50 dark:bg-blue-900/30', progreso: 78 },
+  { icono: Heart, titulo: 'Vida', marca: 'MetLife', color: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30' },
+  { icono: Car, titulo: 'Auto', marca: 'Mapfre', color: 'text-red-600 bg-red-50 dark:bg-red-900/30' }
+];
+
+const datos = [
+  { valor: 10, prefijo: '+', texto: 'años de experiencia' },
+  { valor: 3, texto: 'aseguradoras líderes' },
+  { fijo: '$0', texto: 'costo de asesoría' },
+  { fijo: '24/7', texto: 'asistencia de tu aseguradora' }
+];
 
 export const Hero = () => {
-  const services = [
-    { 
-      icon: TrendingUp, 
-      title: 'PPR Allianz', 
-      color: 'bg-blue-50 dark:bg-blue-900/20', 
-      textColor: 'text-blue-600',
-      href: '#allianz',
-      delay: 0.4 
-    },
-    { 
-      icon: Heart, 
-      title: 'Vida MetLife', 
-      color: 'bg-green-50 dark:bg-green-900/20', 
-      textColor: 'text-green-600',
-      href: '#metlife',
-      delay: 0.5 
-    },
-    { 
-      icon: Home, 
-      title: 'Hogar Mapfre', 
-      color: 'bg-red-50 dark:bg-red-900/20', 
-      textColor: 'text-red-600',
-      href: '#mapfre',
-      delay: 0.6 
-    },
-    { 
-      icon: Car, 
-      title: 'Autos', 
-      color: 'bg-purple-50 dark:bg-purple-900/20', 
-      textColor: 'text-purple-600',
-      href: '#mapfre', // Autos lleva a Mapfre
-      delay: 0.7 
-    }
-  ];
+  const reducirMovimiento = useReducedMotion();
 
-  // Variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3
-      }
-    }
-  };
+  const entrada = (retraso: number) => ({
+    initial: { opacity: 0, y: reducirMovimiento ? 0 : 24 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.8, ease: SUAVE, delay: retraso }
+  });
 
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: { 
-      y: 0, 
-      opacity: 1,
-      transition: { type: "spring", stiffness: 100 }
-    }
-  };
-
-  const badgeVariants = {
-    hidden: { scale: 0, opacity: 0 },
-    visible: { 
-      scale: 1, 
-      opacity: 1,
-      transition: { type: "spring", stiffness: 200, delay: 0.2 }
-    }
-  };
-
-  const buttonVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: (i: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: { delay: 0.3 + i * 0.1, type: "spring", stiffness: 100 }
-    }),
-    hover: { 
-      scale: 1.05,
-      transition: { type: "spring", stiffness: 400 }
-    },
-    tap: { scale: 0.95 }
-  };
-
-  // Estado para el color del texto "lo que más te importa"
-  const [hoverColor, setHoverColor] = React.useState('text-blue-600');
+  // Flotación muy lenta de las tarjetas pequeñas (se desactiva con "reducir movimiento")
+  const flotar = (retraso: number) =>
+    reducirMovimiento
+      ? {}
+      : { animate: { y: [0, -8, 0] }, transition: { duration: 6, repeat: Infinity, ease: 'easeInOut', delay: retraso } };
 
   return (
-    <section className="pt-24 pb-16 px-4 relative overflow-hidden">
-      {/* Elementos decorativos flotantes */}
-      <div className="absolute inset-0 pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 bg-blue-400/20 rounded-full"
-            initial={{ 
-              x: Math.random() * window.innerWidth, 
-              y: Math.random() * window.innerHeight,
-              scale: 0 
-            }}
-            animate={{ 
-              y: [null, -100],
-              scale: [0, 1, 0],
-              opacity: [0, 0.5, 0]
-            }}
-            transition={{
-              duration: 5 + Math.random() * 5,
-              repeat: Infinity,
-              delay: Math.random() * 5
-            }}
-          />
-        ))}
+    <section id="inicio" className="relative isolate overflow-hidden pt-28 pb-16 lg:pt-36 lg:pb-24">
+      {/* Fondo: degradados suaves y cuadrícula de puntos */}
+      <div aria-hidden="true" className="absolute inset-0 -z-10">
+        <div className="absolute -top-40 -left-32 w-[36rem] h-[36rem] rounded-full bg-blue-400/20 dark:bg-blue-600/15 blur-3xl" />
+        <div className="absolute top-20 -right-40 w-[32rem] h-[32rem] rounded-full bg-indigo-400/20 dark:bg-indigo-600/15 blur-3xl" />
+        <div className="absolute inset-0 fondo-puntos" />
       </div>
 
-      <motion.div 
-        className="container mx-auto text-center relative z-10"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <motion.span
-          variants={badgeVariants}
-          className="inline-block px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full text-sm font-medium mb-6"
-        >
-          NISSI - Tu broker de seguros de confianza
-        </motion.span>
-        
-        <motion.h1
-          variants={itemVariants}
-          className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6"
-        >
-          Protegemos{' '}
-          <span className={`${hoverColor} transition-colors duration-500`}>
-            lo que más te importa
-          </span>
-        </motion.h1>
-        
-        <motion.p
-          variants={itemVariants}
-          className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto"
-        >
-          Más de 10 años protegiendo a familias mexicanas con las mejores aseguradoras del mercado
-        </motion.p>
-
-        <motion.div
-          variants={itemVariants}
-          className="flex flex-wrap justify-center gap-4 mb-12"
-        >
-          {/* Botones principales con hover que cambian el color del texto */}
-          {/* Clases completas (no armadas con `bg-${color}`) para que Tailwind las genere */}
-          {[
-            { text: 'PPR Allianz', href: '#allianz', texto: 'text-blue-600', boton: 'bg-blue-600 hover:bg-blue-700', brillo: 'bg-blue-400' },
-            { text: 'MetLife', href: '#metlife', texto: 'text-green-600', boton: 'bg-green-600 hover:bg-green-700', brillo: 'bg-green-400' },
-            { text: 'Mapfre', href: '#mapfre', texto: 'text-red-600', boton: 'bg-red-600 hover:bg-red-700', brillo: 'bg-red-400' }
-          ].map((item, i) => (
-            <motion.a
-              key={item.text}
-              href={item.href}
-              custom={i}
-              variants={buttonVariants}
-              whileHover="hover"
-              whileTap="tap"
-              onHoverStart={() => setHoverColor(item.texto)}
-              onHoverEnd={() => setHoverColor('text-blue-600')}
-              className={`px-6 py-3 ${item.boton} text-white rounded-lg transition-colors font-medium relative overflow-hidden group cursor-pointer`}
+      <div className="container mx-auto px-4">
+        <div className="grid lg:grid-cols-2 gap-14 lg:gap-10 items-center">
+          {/* Texto */}
+          <div className="text-center lg:text-left">
+            <motion.span
+              {...entrada(0.1)}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-gray-800/80 ring-1 ring-black/5 dark:ring-white/10 shadow-sm text-sm font-medium text-gray-700 dark:text-gray-200 backdrop-blur"
             >
-              <span className="relative z-10">{item.text}</span>
-              <motion.div 
-                className={`absolute inset-0 ${item.brillo}`}
-                initial={{ x: '-100%' }}
-                whileHover={{ x: 0 }}
-                transition={{ duration: 0.3 }}
-              />
-            </motion.a>
-          ))}
-        </motion.div>
+              <span className="w-2 h-2 rounded-full bg-emerald-500" />
+              Asesoría sin costo · Ciudad de México
+            </motion.span>
 
-        <motion.div 
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto"
-          variants={itemVariants}
-        >
-          {services.map((service) => (
-            <motion.a
-              key={service.title}
-              href={service.href}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: service.delay }}
-              whileHover={{ 
-                y: -5,
-                scale: 1.02,
-                boxShadow: "0 20px 25px -5px rgba(0,0,0,0.1)"
-              }}
-              onHoverStart={() => setHoverColor(service.textColor)}
-              onHoverEnd={() => setHoverColor('text-blue-600')}
-              className={`${service.color} p-4 rounded-xl text-center cursor-pointer relative overflow-hidden group`}
+            <motion.h1
+              {...entrada(0.2)}
+              className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.08] text-gray-900 dark:text-white"
             >
-              <motion.div 
-                className="absolute inset-0 bg-white/20"
-                initial={{ x: '-100%' }}
-                whileHover={{ x: '100%' }}
-                transition={{ duration: 0.5 }}
-              />
-              <service.icon className={`w-8 h-8 mx-auto mb-2 ${service.textColor} group-hover:scale-110 transition-transform`} />
-              <span className={`text-sm font-medium ${service.textColor}`}>{service.title}</span>
-            </motion.a>
-          ))}
-        </motion.div>
+              Protegemos{' '}
+              <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 bg-clip-text text-transparent">
+                lo que más te importa
+              </span>
+            </motion.h1>
 
-        <motion.div 
-          className="mt-12"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-        >
-          <motion.a
-            href="#contacto"
-            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium group"
-            whileHover={{ x: 10 }}
+            <motion.p
+              {...entrada(0.3)}
+              className="mt-6 text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-xl mx-auto lg:mx-0 leading-relaxed"
+            >
+              Más de 10 años ayudando a familias y empresas mexicanas a elegir el seguro correcto con Allianz, MetLife y Mapfre.
+            </motion.p>
+
+            <motion.div {...entrada(0.4)} className="mt-9 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+              <a
+                href="#contacto"
+                className="group inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-blue-600 text-white font-semibold shadow-lg shadow-blue-600/25 hover:bg-blue-700 hover:shadow-xl hover:shadow-blue-600/30 transition-all"
+              >
+                Cotiza sin costo
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </a>
+              <a
+                href="#allianz"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 font-semibold ring-1 ring-gray-200 dark:ring-gray-700 hover:ring-blue-300 hover:text-blue-700 dark:hover:text-blue-300 transition-all"
+              >
+                <Calculator className="w-4 h-4" />
+                Calcula tu retiro
+              </a>
+            </motion.div>
+
+            {/* Aseguradoras */}
+            <motion.div {...entrada(0.5)} className="mt-10">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500">Trabajamos con</p>
+              <div className="mt-3 flex items-center justify-center lg:justify-start gap-8 text-2xl font-extrabold tracking-tight">
+                <a href="#allianz" className="text-gray-400 hover:text-[#003781] dark:hover:text-blue-300 transition-colors">Allianz</a>
+                <a href="#metlife" className="text-gray-400 hover:text-[#0090DA] dark:hover:text-sky-300 transition-colors">MetLife</a>
+                <a href="#mapfre" className="text-gray-400 hover:text-[#D81E05] dark:hover:text-red-400 transition-colors lowercase">mapfre</a>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Composición visual */}
+          <motion.div
+            initial={{ opacity: 0, scale: reducirMovimiento ? 1 : 0.94, y: reducirMovimiento ? 0 : 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: SUAVE, delay: 0.35 }}
+            className="relative max-w-md w-full mx-auto"
           >
-            <span>Habla con un asesor</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </motion.a>
-        </motion.div>
-      </motion.div>
+            <div className="relative rounded-3xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl shadow-2xl shadow-blue-900/10 ring-1 ring-black/5 dark:ring-white/10 p-6 sm:p-7">
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-md">
+                  <ShieldCheck className="w-6 h-6" />
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Tu plan de protección</p>
+                  <p className="font-bold text-gray-900 dark:text-white">Familia protegida</p>
+                </div>
+                <span className="ml-auto text-[11px] font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
+                  Activo
+                </span>
+              </div>
+
+              <ul className="mt-6 space-y-3">
+                {coberturas.map((c, i) => (
+                  <motion.li
+                    key={c.titulo}
+                    initial={{ opacity: 0, x: reducirMovimiento ? 0 : 16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, ease: SUAVE, delay: 0.7 + i * 0.12 }}
+                    className="flex items-center gap-3 p-3 rounded-2xl bg-gray-50 dark:bg-gray-900/50"
+                  >
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${c.color}`}>
+                      <c.icono className="w-5 h-5" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white">{c.titulo}</p>
+                      {c.progreso ? (
+                        <div className="mt-1.5 h-1.5 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
+                          <motion.div
+                            className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-500"
+                            initial={{ width: 0 }}
+                            animate={{ width: `${c.progreso}%` }}
+                            transition={{ duration: 1.4, ease: SUAVE, delay: 1.1 }}
+                          />
+                        </div>
+                      ) : (
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{c.marca}</p>
+                      )}
+                    </div>
+                    <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0" />
+                  </motion.li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Tarjetas flotantes */}
+            <motion.div
+              {...flotar(0)}
+              className="absolute -left-4 sm:-left-10 -bottom-6 flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-white dark:bg-gray-800 shadow-xl ring-1 ring-black/5 dark:ring-white/10"
+            >
+              <div className="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 flex items-center justify-center">
+                <Clock className="w-5 h-5" />
+              </div>
+              <div className="leading-tight">
+                <p className="text-sm font-bold text-gray-900 dark:text-white">Cotización rápida</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Sin compromiso</p>
+              </div>
+            </motion.div>
+            <motion.div
+              {...flotar(1.5)}
+              className="absolute -right-3 sm:-right-8 -top-6 flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white dark:bg-gray-800 shadow-xl ring-1 ring-black/5 dark:ring-white/10"
+            >
+              <span className="text-lg">🤝</span>
+              <p className="text-sm font-semibold text-gray-900 dark:text-white">Asesoría personalizada</p>
+            </motion.div>
+          </motion.div>
+        </div>
+
+        {/* Datos clave */}
+        <motion.dl
+          {...entrada(0.6)}
+          className="mt-20 grid grid-cols-2 lg:grid-cols-4 gap-px rounded-2xl overflow-hidden bg-gray-200/70 dark:bg-gray-700/60 ring-1 ring-gray-200/70 dark:ring-gray-700/60"
+        >
+          {datos.map((d) => (
+            <div key={d.texto} className="bg-white/90 dark:bg-gray-900/90 px-6 py-6 text-center">
+              <dt className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+                {d.fijo ?? <Contador valor={d.valor!} prefijo={d.prefijo} />}
+              </dt>
+              <dd className="mt-1 text-sm text-gray-500 dark:text-gray-400">{d.texto}</dd>
+            </div>
+          ))}
+        </motion.dl>
+      </div>
     </section>
   );
 };

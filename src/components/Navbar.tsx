@@ -3,11 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, Sun, Moon, Menu, X } from 'lucide-react';
 
 const navItems = [
-  { label: 'Inicio', href: '#' },
+  { label: 'Inicio', href: '#inicio' },
   { label: 'Allianz', href: '#allianz' },
   { label: 'MetLife', href: '#metlife' },
   { label: 'Mapfre', href: '#mapfre' },
   { label: 'Testimonios', href: '#testimonios' },
+  { label: 'Preguntas', href: '#preguntas' },
   { label: 'Contacto', href: '#contacto' }
 ];
 
@@ -106,7 +107,7 @@ export const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo con animación */}
 <motion.a 
-  href="#" 
+  href="#inicio" 
   className="flex items-center space-x-2 group"
   variants={logoVariants}
   initial="hidden"
@@ -166,12 +167,7 @@ export const Navbar = () => {
               }}
               transition={{ duration: 0.5 }}
             >
-              <motion.div
-                animate={isDark ? { scale: [1, 1.2, 1] } : { scale: 1 }}
-                transition={{ duration: 1, repeat: Infinity }}
-              >
-                {isDark ? <Sun className="w-5 h-5 text-yellow-400" /> : <Moon className="w-5 h-5 text-gray-600" />}
-              </motion.div>
+              {isDark ? <Sun className="w-5 h-5 text-yellow-400" /> : <Moon className="w-5 h-5 text-gray-600" />}
             </motion.button>
           </div>
 

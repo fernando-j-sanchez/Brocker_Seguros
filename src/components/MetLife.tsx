@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Shield, Users, Gift, CheckCircle, TrendingUp, Baby, Phone, Star, Award, Clock, ThumbsUp } from 'lucide-react';
 import { VideoPlayer } from './VideoPlayer';
+import { Revelar, SUAVE } from './Revelar';
 
 export const MetLife = () => {
   const features = [
@@ -71,19 +72,20 @@ export const MetLife = () => {
   };
 
   return (
-    <section id="metlife" className="py-16 px-4 bg-gray-50 dark:bg-gray-900">
+    <section id="metlife" className="py-20 px-4 bg-white dark:bg-gray-950">
       <div className="container mx-auto max-w-6xl">
         
         {/* Título Principal */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-black text-blue-900 dark:text-white uppercase tracking-tighter">
-            MetLife <span className="text-blue-500">Seguros</span>
+        <Revelar className="text-center mb-12">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-600 dark:text-sky-400">MetLife</p>
+          <h2 className="mt-3 text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+            Vida y <span className="text-sky-600 dark:text-sky-400">ahorro</span>
           </h2>
-          <p className="text-gray-500 dark:text-gray-400 font-medium">La protección que tu familia merece con respaldo internacional.</p>
-        </div>
+          <p className="mt-4 text-lg md:text-xl text-gray-600 dark:text-gray-300">La protección que tu familia merece con respaldo internacional.</p>
+        </Revelar>
 
         {/* Bloque Superior: Video + Features Grid */}
-        <div className="flex flex-col lg:flex-row overflow-hidden rounded-3xl shadow-2xl bg-white dark:bg-gray-800 border dark:border-gray-700 mb-12">
+        <Revelar className="flex flex-col lg:flex-row overflow-hidden rounded-3xl shadow-2xl bg-white dark:bg-gray-800 border dark:border-gray-700 mb-12">
           
           {/* Video (50%) */}
           <div className="lg:w-1/2 bg-black relative min-h-[350px]">
@@ -114,13 +116,17 @@ export const MetLife = () => {
                </button>
             </div>
           </div>
-        </div>
+        </Revelar>
 
         {/* Product Cards - Solo 2 productos */}
         <div className="grid md:grid-cols-2 gap-6 mb-12 max-w-4xl mx-auto">
           {products.map((product, index) => (
             <motion.div
               key={product.name}
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.7, ease: SUAVE, delay: index * 0.1 }}
               whileHover={{ y: -5 }}
               className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 flex flex-col h-full"
             >
@@ -165,7 +171,7 @@ export const MetLife = () => {
         </div>
 
         {/* Nota de confianza */}
-        <div className="p-6 bg-blue-900 text-white rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6">
+        <Revelar className="p-6 bg-blue-900 text-white rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6">
            <div className="flex items-center gap-4">
               <div className="p-3 bg-white/10 rounded-2xl">
                 <Shield size={32} className="text-blue-300" />
@@ -178,7 +184,7 @@ export const MetLife = () => {
            <button onClick={handleContactClick} className="px-8 py-3 bg-white text-blue-900 rounded-xl font-black text-sm uppercase hover:bg-blue-50 transition-colors shrink-0">
               Ver coberturas
            </button>
-        </div>
+        </Revelar>
       </div>
     </section>
   );

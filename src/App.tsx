@@ -1,12 +1,13 @@
 import React from 'react'
 import { Navbar } from './components/Navbar'
 import { Hero } from './components/Hero'
+import { ComoFunciona } from './components/ComoFunciona'
 import { AllianzPPR } from './components/AllianzPPR'
 import { MetLife } from './components/MetLife'
 import { Mapfre } from './components/Mapfre'
 import { Testimonios } from './components/Testimonios'
-import { WhatsAppButton } from './components/WhatsAppButton'
-import { AsistenteNissi } from './components/AsistenteNissi'
+import { PreguntasFrecuentes } from './components/PreguntasFrecuentes'
+import { ContactoFlotante } from './components/ContactoFlotante'
 import { Footer } from './components/Footer'
 
 function App() {
@@ -15,16 +16,17 @@ function App() {
       <Navbar />
       <main>
         <Hero />
+        <ComoFunciona />
         <AllianzPPR />
         <MetLife />
         <Mapfre />
         <Testimonios />
+        <PreguntasFrecuentes />
       </main>
       <Footer />
 
-      {/* Botones flotantes: asistente a la izquierda, WhatsApp a la derecha */}
-      <AsistenteNissi />
-      <WhatsAppButton />
+      {/* Un solo botón flotante con el asistente y WhatsApp */}
+      <ContactoFlotante />
     </div>
   )
 }

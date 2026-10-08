@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { whatsappUrl } from '../lib/contacto';
+import { Revelar } from './Revelar';
+import { WhatsAppIcon } from './Iconos';
 import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area } from 'recharts';
-import { ChevronDown, ChevronUp, DollarSign, TrendingUp, PiggyBank, MessageCircle, CheckCircle2 } from 'lucide-react';
+import { ChevronDown, ChevronUp, DollarSign, TrendingUp, PiggyBank, CheckCircle2 } from 'lucide-react';
 
 export const AllianzPPR = () => {
   const [age, setAge] = useState<number>(30);
@@ -96,14 +98,18 @@ export const AllianzPPR = () => {
   };
 
   return (
-    <section id="allianz" className="py-12 px-4 bg-gray-50 dark:bg-gray-900">
+    <section id="allianz" className="py-20 px-4 bg-gray-50 dark:bg-gray-900">
       <div className="container mx-auto max-w-6xl">
-        <motion.h2 className="text-3xl font-bold text-center mb-8 text-gray-800 dark:text-white">
-          Calculadora <span className="text-blue-600">PPR Allianz</span>
-        </motion.h2>
+        <Revelar className="text-center mb-10">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">Allianz</p>
+          <h2 className="mt-3 text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+            Calculadora <span className="text-blue-600 dark:text-blue-400">PPR</span>
+          </h2>
+          <p className="mt-4 text-lg md:text-xl text-gray-600 dark:text-gray-300">Descubre cuánto podrías juntar para tu retiro.</p>
+        </Revelar>
 
         {/* Card Principal: Video + Formulario */}
-        <div className="flex flex-col lg:flex-row overflow-hidden rounded-3xl shadow-2xl bg-white dark:bg-gray-800 border dark:border-gray-700 mb-8">
+        <Revelar className="flex flex-col lg:flex-row overflow-hidden rounded-3xl shadow-2xl bg-white dark:bg-gray-800 border dark:border-gray-700 mb-8">
           {/* Panel de beneficios (reemplaza el video de la campaña olímpica, que ya terminó).
               Si llega un video nuevo de Allianz, se puede volver a usar <VideoPlayer videoSrc="/videos/archivo.mp4" />. */}
           <div className="lg:w-1/2 relative min-h-[350px] overflow-hidden bg-gradient-to-br from-[#003781] via-blue-800 to-blue-600 text-white p-8 sm:p-10 flex flex-col justify-between">
@@ -225,10 +231,10 @@ export const AllianzPPR = () => {
               rel="noopener noreferrer" 
               className="flex items-center justify-center gap-2 w-full py-3 bg-green-500 text-white rounded-xl font-bold hover:bg-green-600 transition-all"
             >
-              <MessageCircle size={18} /> Contactar Asesor
+              <WhatsAppIcon className="w-[18px] h-[18px]" /> Contactar Asesor
             </a>
           </div>
-        </div>
+        </Revelar>
 
         {/* Totales - Solo mostrar si hay proyección válida */}
         {!validationError && projection.length > 0 && (

@@ -64,3 +64,51 @@ body {
     overflow-x: auto;
   }
 }
+
+/* Cuadrícula de puntos sutil para fondos */
+.fondo-puntos {
+  background-image: radial-gradient(rgba(37, 99, 235, 0.12) 1px, transparent 1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+}
+
+.dark .fondo-puntos {
+  background-image: radial-gradient(rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Compensa la barra de navegación fija al saltar a una sección */
+section[id],
+footer[id] {
+  scroll-margin-top: 4.5rem;
+}
+
+/* Anillo de color que gira alrededor de los avatares sin foto */
+@keyframes girar {
+  to { transform: rotate(360deg); }
+}
+
+.avatar-anillo::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 9999px;
+  background: conic-gradient(from 0deg, #2563eb, #22d3ee, #a855f7, #f43f5e, #2563eb);
+  animation: girar 6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avatar-anillo::before {
+    animation: none;
+  }
+}
