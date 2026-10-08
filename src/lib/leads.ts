@@ -32,6 +32,7 @@ const guardarEnHojaDeCalculo = async (lead: Lead) => {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(lead),
+    signal: AbortSignal.timeout(25000),
   });
   if (!res.ok) throw new Error(`Google Sheets respondió ${res.status}`);
 };

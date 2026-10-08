@@ -1,5 +1,10 @@
 {
   "framework": "vite",
   "buildCommand": "npm run build",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "functions": {
+    "api/chat.js": { "maxDuration": 30 },
+    "api/estado.js": { "maxDuration": 60 },
+    "api/lead.js": { "maxDuration": 30 }
+  }
 }

@@ -1,7 +1,16 @@
 // Función serverless de Vercel: el "Asistente NISSI" responde con Gemini (Google AI, plan gratuito).
 // La clave GEMINI_API_KEY solo existe en el servidor; nunca llega al navegador.
 
-import { obtenerClaveGemini, modelosGemini, urlGemini, convieneProbarOtroModelo, esLimiteOSaturacion } from './_gemini.js';
+import {
+  obtenerClaveGemini,
+  modelosGemini,
+  urlGemini,
+  convieneProbarOtroModelo,
+  esLimiteOSaturacion,
+  esTiempoAgotado,
+  TIEMPO_POR_MODELO_MS,
+  TIEMPO_TOTAL_MS,
+} from './_gemini.js';
 
 const INSTRUCCIONES = `Eres "Asistente NISSI", el asistente virtual de NISSI, un broker (agente) de seguros en la Ciudad de México.
 Hablas en español de México, con un tono cálido, cercano y profesional. Usa como máximo un emoji por mensaje.
@@ -61,42 +70,53 @@ export default async function handler(req, res) {
     generationConfig: { temperature: 0.6, maxOutputTokens: 2048 },
   });
 
+  const inicio = Date.now();
   let huboLimite = false;
-  try {
-    for (const modelo of modelosGemini()) {
-      const respuesta = await fetch(urlGemini(modelo, 'generateContent'), {
+
+  for (const modelo of modelosGemini()) {
+    const restante = TIEMPO_TOTAL_MS - (Date.now() - inicio);
+    if (restante < 3000) break;
+
+    let respuesta;
+    let datos;
+    try {
+      respuesta = await fetch(urlGemini(modelo, 'generateContent'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
         body: peticion,
+        signal: AbortSignal.timeout(Math.min(TIEMPO_POR_MODELO_MS, restante)),
       });
-      const datos = await respuesta.json().catch(() => ({}));
-
-      if (!respuesta.ok) {
-        console.error(`Error de Gemini (${modelo}):`, respuesta.status, JSON.stringify(datos).slice(0, 500));
-        if (esLimiteOSaturacion(respuesta.status)) huboLimite = true;
-        if (convieneProbarOtroModelo(respuesta.status, datos)) continue;
-        return res.status(502).json({ error: 'El asistente no está disponible por ahora', motivo: 'configuracion' });
-      }
-
-      const texto = (datos.candidates?.[0]?.content?.parts || [])
-        .filter((p) => !p.thought)
-        .map((p) => p.text || '')
-        .join('')
-        .trim();
-
-      if (!texto) {
-        console.error(`Gemini (${modelo}) devolvió una respuesta vacía:`, JSON.stringify(datos).slice(0, 500));
-        return res.status(502).json({ error: 'Respuesta vacía' });
-      }
-      return res.status(200).json({ reply: texto });
+      datos = await respuesta.json().catch(() => ({}));
+    } catch (error) {
+      // Google tardó demasiado o falló la conexión: se intenta con el siguiente modelo.
+      console.error(`Gemini (${modelo}) ${esTiempoAgotado(error) ? 'tardó demasiado' : 'falló'}:`, String(error));
+      huboLimite = true;
+      continue;
     }
 
-    return res.status(503).json({
-      error: huboLimite ? 'Se alcanzó el límite gratuito de Gemini' : 'Ningún modelo de Gemini está disponible',
-      motivo: huboLimite ? 'limite' : 'modelos',
-    });
-  } catch (error) {
-    console.error('Error al llamar a Gemini:', error);
-    return res.status(502).json({ error: 'El asistente no está disponible por ahora' });
+    if (!respuesta.ok) {
+      console.error(`Error de Gemini (${modelo}):`, respuesta.status, JSON.stringify(datos).slice(0, 500));
+      if (esLimiteOSaturacion(respuesta.status)) huboLimite = true;
+      if (convieneProbarOtroModelo(respuesta.status, datos)) continue;
+      return res.status(502).json({ error: 'El asistente no está disponible por ahora', motivo: 'configuracion' });
+    }
+
+    const texto = (datos.candidates?.[0]?.content?.parts || [])
+      .filter((p) => !p.thought)
+      .map((p) => p.text || '')
+      .join('')
+      .trim();
+
+    if (!texto) {
+      // Pasa cuando Google bloquea la respuesta o se queda sin espacio; se prueba otro modelo.
+      console.error(`Gemini (${modelo}) devolvió una respuesta vacía:`, JSON.stringify(datos).slice(0, 500));
+      continue;
+    }
+    return res.status(200).json({ reply: texto });
   }
+
+  return res.status(503).json({
+    error: huboLimite ? 'Gemini está saturado o se alcanzó el límite gratuito' : 'Ningún modelo de Gemini está disponible',
+    motivo: huboLimite ? 'limite' : 'modelos',
+  });
 }

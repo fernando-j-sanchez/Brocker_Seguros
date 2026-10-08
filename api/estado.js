@@ -1,7 +1,15 @@
 // Diagnóstico: abre https://TU-SITIO/api/estado para ver si el asistente y Google Sheets
 // están bien configurados. Solo muestra "sí/no" y mensajes de error; nunca las claves.
 
-import { obtenerClaveGemini, modelosGemini, urlGemini, esModeloNoDisponible, esLimiteOSaturacion } from './_gemini.js';
+import {
+  obtenerClaveGemini,
+  modelosGemini,
+  urlGemini,
+  esModeloNoDisponible,
+  esLimiteOSaturacion,
+  esTiempoAgotado,
+  TIEMPO_POR_MODELO_MS,
+} from './_gemini.js';
 
 const revisarGemini = async () => {
   const clave = obtenerClaveGemini();
@@ -11,12 +19,15 @@ const revisarGemini = async () => {
 
   // Prueba real (una pregunta mínima) para detectar también si se agotó el límite gratuito.
   const modelos = {};
+  const inicio = Date.now();
   for (const modelo of modelosGemini()) {
+    if (Date.now() - inicio > 40000) break; // Vercel corta la función a los 60 s
     try {
       const respuesta = await fetch(urlGemini(modelo, 'generateContent'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-goog-api-key': clave },
         body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: 'Responde solo: ok' }] }] }),
+        signal: AbortSignal.timeout(TIEMPO_POR_MODELO_MS),
       });
       const datos = await respuesta.json().catch(() => ({}));
       if (respuesta.ok) {
@@ -35,15 +46,19 @@ const revisarGemini = async () => {
         };
       }
     } catch (error) {
+      if (esTiempoAgotado(error)) {
+        modelos[modelo] = `tardó más de ${TIEMPO_POR_MODELO_MS / 1000} segundos`;
+        continue;
+      }
       return { ok: false, problema: 'No se pudo conectar con Google Gemini.', detalle: String(error) };
     }
   }
 
-  const sinLimite = Object.values(modelos).some((m) => m.startsWith('límite'));
+  const saturado = Object.values(modelos).some((m) => m.startsWith('límite') || m.startsWith('tardó') || m.startsWith('Google'));
   return {
     ok: false,
-    problema: sinLimite
-      ? 'Se agotó el límite gratuito de Gemini. Se renueva solo (por minuto y por día); para no tener límites hay que activar la facturación en Google AI Studio.'
+    problema: saturado
+      ? 'Gemini está saturado o se agotó el límite gratuito. Se renueva solo (por minuto y por día); para no tener límites hay que activar la facturación en Google AI Studio.'
       : 'Ninguno de los modelos de Gemini está disponible para esta clave.',
     modelos,
   };
@@ -58,7 +73,7 @@ const revisarSheets = async () => {
     return { ok: false, problema: 'La URL no tiene el formato esperado. Debe ser la "URL de App web" y terminar en /exec (no el "ID de implementación").' };
   }
   try {
-    const respuesta = await fetch(url.trim());
+    const respuesta = await fetch(url.trim(), { signal: AbortSignal.timeout(15000) });
     const texto = await respuesta.text();
     let datos = null;
     try {
