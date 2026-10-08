@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Star, Quote } from 'lucide-react';
 
@@ -10,9 +10,14 @@ interface Testimonio {
   text: string;
   rating: number;
   ciudad: string;
+  // Sin foto se muestra un avatar con iniciales y un anillo animado
+  image?: string;
   producto: string;
   aseguradora: Aseguradora;
 }
+
+const unsplash = (id: string) => `https://images.unsplash.com/photo-${id}?w=160&h=160&fit=crop&crop=faces&auto=format&q=70`;
+const retrato = (genero: 'men' | 'women', n: number) => `https://randomuser.me/api/portraits/${genero}/${n}.jpg`;
 
 const coloresAvatar = [
   'bg-blue-600',
@@ -39,6 +44,7 @@ const testimonios: Testimonio[] = [
     text: 'La flotilla de mi empresa está completamente protegida gracias a Mapfre. El ahorro con la tarifa preferencial es significativo.',
     rating: 5,
     ciudad: 'Monterrey',
+    image: unsplash('1472099645785-5658abf4ff4e'),
     producto: 'Autos Flotilla',
     aseguradora: 'Mapfre'
   },
@@ -48,6 +54,7 @@ const testimonios: Testimonio[] = [
     text: 'Contraté el plan Superación Plus para mis hijos. Es la mejor inversión que he hecho para asegurar su futuro educativo.',
     rating: 5,
     ciudad: 'Guadalajara',
+    image: unsplash('1438761681033-6461ffad8d80'),
     producto: 'Superación Plus',
     aseguradora: 'Mapfre'
   },
@@ -57,6 +64,7 @@ const testimonios: Testimonio[] = [
     text: 'Me ayudaron a planear mi retiro con el PPR de Allianz y ahora estoy más tranquila sobre mi futuro financiero.',
     rating: 5,
     ciudad: 'Ciudad de México',
+    image: unsplash('1487412720507-e7ab37603c6f'),
     producto: 'PPR',
     aseguradora: 'Allianz'
   },
@@ -66,6 +74,7 @@ const testimonios: Testimonio[] = [
     text: 'Contraté el seguro de gastos médicos para mi familia y la atención ha sido impecable. Los asesores son muy profesionales y siempre están disponibles.',
     rating: 4,
     ciudad: 'Querétaro',
+    image: unsplash('1500648767791-00dcc994a43e'),
     producto: 'Gastos Médicos',
     aseguradora: 'Mapfre'
   },
@@ -75,6 +84,7 @@ const testimonios: Testimonio[] = [
     text: 'El proceso de cotización para mi auto fue rápido y transparente. Encontré la mejor cobertura al mejor precio.',
     rating: 5,
     ciudad: 'Puebla',
+    image: unsplash('1580489944761-15a19d654956'),
     producto: 'Seguro de Auto',
     aseguradora: 'Mapfre'
   },
@@ -102,6 +112,7 @@ const testimonios: Testimonio[] = [
     text: 'Aseguramos el restaurante con Protección Empresarial. Cuando tuvimos un corto circuito en la cocina nos acompañaron en todo el proceso.',
     rating: 5,
     ciudad: 'Ciudad de México',
+    image: retrato('men', 46),
     producto: 'Protección Empresarial',
     aseguradora: 'Mapfre'
   },
@@ -120,6 +131,7 @@ const testimonios: Testimonio[] = [
     text: 'Tengo seis camionetas de reparto y conseguí una tarifa de flotilla mucho mejor que asegurando cada unidad por separado.',
     rating: 4,
     ciudad: 'Estado de México',
+    image: retrato('men', 75),
     producto: 'Autos Flotilla',
     aseguradora: 'Mapfre'
   },
@@ -129,6 +141,7 @@ const testimonios: Testimonio[] = [
     text: 'Aseguré mi departamento en muy poco tiempo y me resolvieron todas mis dudas por WhatsApp. Súper recomendables.',
     rating: 5,
     ciudad: 'Ciudad de México',
+    image: retrato('women', 26),
     producto: 'Seguro de Hogar',
     aseguradora: 'Mapfre'
   },
@@ -147,6 +160,7 @@ const testimonios: Testimonio[] = [
     text: 'Mi tienda en línea ahora está protegida contra ciberataques. No sabía que existía un seguro así hasta que me asesoraron.',
     rating: 5,
     ciudad: 'Guadalajara',
+    image: retrato('women', 90),
     producto: 'Protección Digital 360',
     aseguradora: 'Mapfre'
   },
@@ -156,6 +170,7 @@ const testimonios: Testimonio[] = [
     text: 'Mi esposa tuvo una cirugía de emergencia y el seguro de gastos médicos respondió sin problema. El acompañamiento del asesor fue clave.',
     rating: 5,
     ciudad: 'Ciudad de México',
+    image: retrato('men', 22),
     producto: 'Gastos Médicos',
     aseguradora: 'Mapfre'
   }
@@ -170,6 +185,35 @@ const colorAseguradora: Record<Aseguradora, string> = {
 const promedio = testimonios.reduce((suma, t) => suma + t.rating, 0) / testimonios.length;
 const mitad = Math.ceil(testimonios.length / 2);
 const filas = [testimonios.slice(0, mitad), testimonios.slice(mitad)];
+
+const Avatar = ({ t, indice }: { t: Testimonio; indice: number }) => {
+  const [fallo, setFallo] = useState(false);
+
+  if (t.image && !fallo) {
+    return (
+      <img
+        src={t.image}
+        alt={t.name}
+        width={48}
+        height={48}
+        loading="lazy"
+        onError={() => setFallo(true)}
+        className="w-12 h-12 flex-shrink-0 rounded-full object-cover ring-2 ring-white dark:ring-gray-700 shadow"
+      />
+    );
+  }
+
+  // Sin foto (o si la foto no carga): iniciales con un anillo de color que gira lentamente
+  return (
+    <div aria-hidden="true" className="avatar-anillo relative w-12 h-12 flex-shrink-0 rounded-full">
+      <div
+        className={`relative z-10 w-full h-full rounded-full ${coloresAvatar[indice % coloresAvatar.length]} text-white font-semibold flex items-center justify-center ring-2 ring-white dark:ring-gray-700`}
+      >
+        {iniciales(t.name)}
+      </div>
+    </div>
+  );
+};
 
 const StarRating = ({ rating }: { rating: number }) => (
   <div className="flex gap-0.5" aria-label={`${rating} de 5 estrellas`}>
@@ -194,12 +238,7 @@ const Tarjeta = ({ t, indice, oculto }: { t: Testimonio; indice: number; oculto?
       </div>
       <p className="flex-1 text-gray-700 dark:text-gray-200 text-sm leading-relaxed">“{t.text}”</p>
       <div className="flex items-center gap-3 mt-5 pt-4 border-t border-gray-100 dark:border-gray-600/60">
-        <div
-          aria-hidden="true"
-          className={`w-12 h-12 flex-shrink-0 rounded-full ${coloresAvatar[indice % coloresAvatar.length]} text-white font-semibold flex items-center justify-center ring-2 ring-white dark:ring-gray-700 shadow`}
-        >
-          {iniciales(t.name)}
-        </div>
+        <Avatar t={t} indice={indice} />
         <div className="min-w-0 flex-1">
           <h4 className="font-semibold text-gray-900 dark:text-white truncate">{t.name}</h4>
           <p className="text-xs text-gray-500 dark:text-gray-400 truncate">

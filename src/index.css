@@ -92,3 +92,23 @@ section[id],
 footer[id] {
   scroll-margin-top: 4.5rem;
 }
+
+/* Anillo de color que gira alrededor de los avatares sin foto */
+@keyframes girar {
+  to { transform: rotate(360deg); }
+}
+
+.avatar-anillo::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 9999px;
+  background: conic-gradient(from 0deg, #2563eb, #22d3ee, #a855f7, #f43f5e, #2563eb);
+  animation: girar 6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avatar-anillo::before {
+    animation: none;
+  }
+}
