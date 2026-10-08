@@ -1,7 +1,7 @@
 // Diagnóstico: abre https://TU-SITIO/api/estado para ver si el asistente y Google Sheets
 // están bien configurados. Solo muestra "sí/no" y mensajes de error; nunca las claves.
 
-import { obtenerClaveGemini, modelosGemini, urlGemini, esModeloNoDisponible } from './_gemini.js';
+import { obtenerClaveGemini, modelosGemini, urlGemini, esModeloNoDisponible, esLimiteOSaturacion } from './_gemini.js';
 
 const revisarGemini = async () => {
   const clave = obtenerClaveGemini();
@@ -9,27 +9,44 @@ const revisarGemini = async () => {
     return { ok: false, problema: 'Falta la variable GEMINI_API_KEY en Vercel (o falta hacer Redeploy después de agregarla).' };
   }
 
-  const probados = [];
+  // Prueba real (una pregunta mínima) para detectar también si se agotó el límite gratuito.
+  const modelos = {};
   for (const modelo of modelosGemini()) {
     try {
-      const respuesta = await fetch(urlGemini(modelo), { headers: { 'x-goog-api-key': clave } });
+      const respuesta = await fetch(urlGemini(modelo, 'generateContent'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': clave },
+        body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: 'Responde solo: ok' }] }] }),
+      });
       const datos = await respuesta.json().catch(() => ({}));
-      if (respuesta.ok) return { ok: true, modelo, modelosProbados: [...probados, modelo] };
-      probados.push(`${modelo} (${respuesta.status})`);
-      if (!esModeloNoDisponible(respuesta.status, datos)) {
+      if (respuesta.ok) {
+        modelos[modelo] = 'funciona';
+        return { ok: true, modeloEnUso: modelo, modelos };
+      }
+      if (esModeloNoDisponible(respuesta.status, datos)) {
+        modelos[modelo] = 'ya no existe';
+      } else if (esLimiteOSaturacion(respuesta.status)) {
+        modelos[modelo] = respuesta.status === 429 ? 'límite gratuito agotado por ahora' : 'Google saturado';
+      } else {
         return {
           ok: false,
-          problema: respuesta.status === 400 || respuesta.status === 403
-            ? 'Google rechazó la clave GEMINI_API_KEY. Revisa que la copiaste completa (empieza con AIza) y sin espacios.'
-            : `Google respondió con error ${respuesta.status}.`,
-          detalleGoogle: datos?.error?.message || null,
+          problema: 'Google rechazó la clave GEMINI_API_KEY. Revisa que la copiaste completa (empieza con AIza) y sin espacios.',
+          detalleGoogle: datos?.error?.message || `Error ${respuesta.status}`,
         };
       }
     } catch (error) {
       return { ok: false, problema: 'No se pudo conectar con Google Gemini.', detalle: String(error) };
     }
   }
-  return { ok: false, problema: 'Ninguno de los modelos de Gemini está disponible para esta clave.', modelosProbados: probados };
+
+  const sinLimite = Object.values(modelos).some((m) => m.startsWith('límite'));
+  return {
+    ok: false,
+    problema: sinLimite
+      ? 'Se agotó el límite gratuito de Gemini. Se renueva solo (por minuto y por día); para no tener límites hay que activar la facturación en Google AI Studio.'
+      : 'Ninguno de los modelos de Gemini está disponible para esta clave.',
+    modelos,
+  };
 };
 
 const revisarSheets = async () => {

@@ -23,38 +23,45 @@ const OPCIONES_RAPIDAS = [
 ];
 
 // Respuestas de respaldo por si la IA no está configurada o no responde.
-const RESPUESTAS_LOCALES: { claves: string[]; respuesta: string }[] = [
+const RESPUESTAS_LOCALES: { tema?: string; claves: string[]; respuesta: string }[] = [
   {
+    tema: 'PPR Allianz',
     claves: ['ppr', 'retiro', 'allianz', 'jubil', 'pension', 'pensión'],
     respuesta:
       'El **PPR Allianz** es un plan para ahorrar e invertir para tu retiro. El plazo mínimo es de 10 años y, con ese plazo, la aportación mínima es de $3,000 al mes. Además, tus aportaciones pueden ser deducibles de impuestos. Puedes simular tu ahorro en la calculadora de la página o dejarme tus datos para que un asesor te arme un plan.'
   },
   {
+    tema: 'Seguro de Vida MetLife',
     claves: ['vida', 'metlife', 'fallec', 'familia'],
     respuesta:
       'Con **MetLife** tenemos Seguro de Vida (fallecimiento, invalidez, gastos funerarios, cobertura de cáncer y más de 20 coberturas adicionales) y Ahorro Flexible desde $500 al mes. ¿Te gustaría que un asesor te cotice según tu edad y la suma asegurada que buscas?'
   },
   {
+    tema: 'Seguro de Auto / Flotilla',
     claves: ['auto', 'carro', 'coche', 'flotilla', 'vehícul', 'vehicul', 'camioneta'],
     respuesta:
       'Con **Mapfre** aseguramos autos y flotillas desde 2 vehículos, con cobertura Amplia, Limitada o de Responsabilidad Civil. Puedes usar el cotizador de flotillas en la sección Mapfre, o dime cuántos vehículos tienes y de qué año y un asesor te contacta.'
   },
   {
+    tema: 'Gastos Médicos Mayores',
     claves: ['médic', 'medic', 'salud', 'hospital', 'gmm'],
     respuesta:
       'Manejamos **Gastos Médicos Mayores** con Mapfre para ti o tu familia. Para cotizar necesitamos la edad de cada persona y el estado donde viven. ¿Quieres dejarme tus datos para que un asesor te envíe opciones?'
   },
   {
+    tema: 'Seguro de Hogar',
     claves: ['hogar', 'casa', 'departamento', 'depa'],
     respuesta:
       'El **Seguro de Hogar Mapfre** protege tu casa y tus pertenencias. Un asesor puede cotizarlo según el valor de tu vivienda y de tus contenidos. ¿Te contactamos?'
   },
   {
+    tema: 'Superación Plus (educativo)',
     claves: ['educa', 'escuela', 'hijo', 'universidad', 'superaci'],
     respuesta:
       'Con **Superación Plus** aseguras los estudios de tus hijos desde $418 al mes. ¿Cuántos años tiene tu hijo o hija? Así un asesor te muestra cuánto podrías juntar.'
   },
   {
+    tema: 'Protección Empresarial',
     claves: ['empresa', 'negocio', 'pyme', 'ciber', 'digital'],
     respuesta:
       'Para negocios tenemos **Protección Empresarial** y **Protección Digital 360** de Mapfre (ciberriesgos, reputación, restauración de sistemas y recuperación de datos). ¿Me compartes el giro de tu negocio para que un asesor te contacte?'
@@ -71,13 +78,32 @@ const RESPUESTAS_LOCALES: { claves: string[]; respuesta: string }[] = [
   }
 ];
 
-const respuestaLocal = (texto: string) => {
+const buscarTema = (texto: string) => {
   const t = texto.toLowerCase();
-  const encontrada = RESPUESTAS_LOCALES.find((r) => r.claves.some((c) => t.includes(c)));
-  return (
-    encontrada?.respuesta ??
-    'Gracias por tu mensaje. Un asesor de NISSI puede ayudarte con eso. Toca **"Quiero que me contacten"** o escríbenos por WhatsApp y te respondemos en breve.'
-  );
+  return RESPUESTAS_LOCALES.find((r) => r.claves.some((c) => t.includes(c)));
+};
+
+/**
+ * Respuesta sin IA. Si el mensaje no menciona un producto pero antes se habló de uno
+ * (ej. "tengo 26 años, es para mí" después de "gastos médicos"), se da seguimiento a ese tema.
+ * Devuelve también si conviene mostrar el formulario de contacto.
+ */
+const respuestaLocal = (texto: string, mensajesAnteriores: string[]): { texto: string; pedirDatos: boolean } => {
+  const encontrada = buscarTema(texto);
+  if (encontrada) return { texto: encontrada.respuesta, pedirDatos: false };
+
+  const temaPrevio = [...mensajesAnteriores].reverse().map(buscarTema).find((r) => r?.tema);
+  if (temaPrevio?.tema) {
+    return {
+      texto: `¡Gracias por el dato! 🙌 Con esa información un asesor puede prepararte tu cotización de **${temaPrevio.tema}** sin compromiso. Déjame tu nombre y teléfono aquí abajo y te contactamos, o escríbenos por WhatsApp para atenderte de inmediato.`,
+      pedirDatos: true
+    };
+  }
+
+  return {
+    texto: 'Gracias por tu mensaje. Para darte la mejor opción, cuéntame qué seguro te interesa (retiro, vida, auto, gastos médicos, hogar o educación), o toca **"Quiero que me contacten"** y un asesor te atiende.',
+    pedirDatos: false
+  };
 };
 
 // Convierte **negritas** en <strong> sin usar HTML crudo.
@@ -151,7 +177,12 @@ export const AsistenteNissi = () => {
     } catch (error) {
       // Si la IA falla se usan respuestas preparadas; /api/estado muestra la causa.
       console.warn('Asistente sin IA, usando respuestas preparadas:', error);
-      respuesta = respuestaLocal(limpio);
+      const local = respuestaLocal(
+        limpio,
+        mensajes.filter((m) => m.role === 'user').map((m) => m.content)
+      );
+      respuesta = local.texto;
+      if (local.pedirDatos && !datosEnviados) setMostrarFormulario(true);
     }
 
     setMensajes((prev) => [...prev, { role: 'assistant', content: respuesta }]);

@@ -1,7 +1,7 @@
 // Función serverless de Vercel: el "Asistente NISSI" responde con Gemini (Google AI, plan gratuito).
 // La clave GEMINI_API_KEY solo existe en el servidor; nunca llega al navegador.
 
-import { obtenerClaveGemini, modelosGemini, urlGemini, esModeloNoDisponible } from './_gemini.js';
+import { obtenerClaveGemini, modelosGemini, urlGemini, convieneProbarOtroModelo, esLimiteOSaturacion } from './_gemini.js';
 
 const INSTRUCCIONES = `Eres "Asistente NISSI", el asistente virtual de NISSI, un broker (agente) de seguros en la Ciudad de México.
 Hablas en español de México, con un tono cálido, cercano y profesional. Usa como máximo un emoji por mensaje.
@@ -61,6 +61,7 @@ export default async function handler(req, res) {
     generationConfig: { temperature: 0.6, maxOutputTokens: 2048 },
   });
 
+  let huboLimite = false;
   try {
     for (const modelo of modelosGemini()) {
       const respuesta = await fetch(urlGemini(modelo, 'generateContent'), {
@@ -72,8 +73,9 @@ export default async function handler(req, res) {
 
       if (!respuesta.ok) {
         console.error(`Error de Gemini (${modelo}):`, respuesta.status, JSON.stringify(datos).slice(0, 500));
-        if (esModeloNoDisponible(respuesta.status, datos)) continue;
-        return res.status(502).json({ error: 'El asistente no está disponible por ahora' });
+        if (esLimiteOSaturacion(respuesta.status)) huboLimite = true;
+        if (convieneProbarOtroModelo(respuesta.status, datos)) continue;
+        return res.status(502).json({ error: 'El asistente no está disponible por ahora', motivo: 'configuracion' });
       }
 
       const texto = (datos.candidates?.[0]?.content?.parts || [])
@@ -89,7 +91,10 @@ export default async function handler(req, res) {
       return res.status(200).json({ reply: texto });
     }
 
-    return res.status(502).json({ error: 'Ningún modelo de Gemini está disponible' });
+    return res.status(503).json({
+      error: huboLimite ? 'Se alcanzó el límite gratuito de Gemini' : 'Ningún modelo de Gemini está disponible',
+      motivo: huboLimite ? 'limite' : 'modelos',
+    });
   } catch (error) {
     console.error('Error al llamar a Gemini:', error);
     return res.status(502).json({ error: 'El asistente no está disponible por ahora' });
