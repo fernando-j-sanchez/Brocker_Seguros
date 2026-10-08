@@ -107,6 +107,11 @@ const respuestaLocal = (texto: string, mensajesAnteriores: string[]): { texto: s
   };
 };
 
+const detectarContacto = (texto: string) => ({
+  email: texto.match(/[\w.+-]+@[\w-]+\.[\w.-]+/)?.[0] ?? '',
+  telefono: texto.match(/(?:\+?52[\s-]?)?(?:\d[\s-]?){10}/)?.[0]?.trim() ?? ''
+});
+
 // Convierte **negritas** en <strong> sin usar HTML crudo.
 const TextoFormateado = ({ texto }: { texto: string }) => (
   <>
@@ -159,6 +164,7 @@ export const AsistenteNissi = ({ abierto, onCerrar }: Props) => {
     setEscribiendo(true);
 
     let respuesta: string;
+    let registrado = false;
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
@@ -171,6 +177,8 @@ export const AsistenteNissi = ({ abierto, onCerrar }: Props) => {
       const data = await res.json();
       if (!res.ok || !data.reply) throw new Error(data.error || `Error ${res.status}`);
       respuesta = data.reply;
+      registrado = Boolean(data.registrado);
+      if (registrado) setDatosEnviados(true);
     } catch (error) {
       // Si la IA falla se usan respuestas preparadas; /api/estado muestra la causa.
       console.warn('Asistente sin IA, usando respuestas preparadas:', error);
@@ -184,6 +192,14 @@ export const AsistenteNissi = ({ abierto, onCerrar }: Props) => {
 
     setMensajes((prev) => [...prev, { role: 'assistant', content: respuesta }]);
     setEscribiendo(false);
+
+    // Red de seguridad: si el cliente escribió su correo o teléfono pero no quedó registrado,
+    // se abre el formulario con esos datos ya puestos para que solo confirme.
+    const contacto = detectarContacto(limpio);
+    if (!registrado && !datosEnviados && (contacto.email || contacto.telefono)) {
+      setDatos((d) => ({ ...d, email: d.email || contacto.email, telefono: d.telefono || contacto.telefono }));
+      setMostrarFormulario(true);
+    }
   };
 
   const enviarDatos = async (e: React.FormEvent) => {
