@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Heart, Shield, Users, Gift, CheckCircle, TrendingUp, Baby, Phone, Star, Award, Clock, ThumbsUp } from 'lucide-react';
 import { VideoPlayer } from './VideoPlayer';
 import { Revelar, SUAVE } from './Revelar';
+import { useSolicitud } from '../lib/solicitud';
 
 export const MetLife = () => {
   const features = [
@@ -67,9 +68,14 @@ export const MetLife = () => {
     }
   ]; // ← Aquí faltaba el cierre del array y el punto y coma
 
-  const handleContactClick = () => {
-    document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const { abrirSolicitud } = useSolicitud();
+  const handleContactClick = () =>
+    abrirSolicitud({
+      producto: 'MetLife - Vida y Ahorro',
+      titulo: 'Asesoría MetLife',
+      descripcion: 'Te ayudamos a elegir la suma asegurada y el plan de ahorro ideal para tu familia.',
+      seccion: 'MetLife'
+    });
 
   return (
     <section id="metlife" className="py-20 px-4 bg-white dark:bg-gray-950">

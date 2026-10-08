@@ -4,6 +4,7 @@ import { MessageCircle, X, Sparkles } from 'lucide-react';
 import { AsistenteNissi } from './AsistenteNissi';
 import { WhatsAppIcon } from './Iconos';
 import { whatsappUrl } from '../lib/contacto';
+import { useSolicitud } from '../lib/solicitud';
 
 const CLAVE_SALUDO_CERRADO = 'nissi-saludo-cerrado';
 
@@ -22,7 +23,7 @@ const leerSaludoCerrado = () => {
 export const ContactoFlotante = () => {
   const reducirMovimiento = useReducedMotion();
   const [menuAbierto, setMenuAbierto] = useState(false);
-  const [asistenteAbierto, setAsistenteAbierto] = useState(false);
+  const { asistenteAbierto, setAsistenteAbierto } = useSolicitud();
   const [mostrarSaludo, setMostrarSaludo] = useState(false);
   const [interactuo, setInteractuo] = useState(leerSaludoCerrado);
   const contenedorRef = useRef<HTMLDivElement>(null);

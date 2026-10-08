@@ -4,9 +4,11 @@ import { Car, Home, Building2, Heart, Shield, Wifi, Globe, Database, Info, Truck
 import { guardarLead } from '../lib/leads';
 import { whatsappUrl } from '../lib/contacto';
 import { Revelar, SUAVE } from './Revelar';
+import { useSolicitud } from '../lib/solicitud';
 import { WhatsAppIcon } from './Iconos';
 
 export const Mapfre = () => {
+  const { abrirSolicitud } = useSolicitud();
   const [formData, setFormData] = useState({
     vehiculos: 2,
     marca: '',
@@ -118,10 +120,18 @@ export const Mapfre = () => {
 
         {/* Banner de Mapfre: la imagen ya trae su propio texto, así que se muestra sin nada encima */}
         <Revelar className="max-w-4xl mx-auto mb-14">
-          <a
-            href="#contacto"
+          <button
+            type="button"
+            onClick={() =>
+              abrirSolicitud({
+                producto: 'Mapfre - Gastos Médicos PMM Pyme',
+                titulo: 'Gastos médicos para tu empresa',
+                descripcion: 'Conoce los beneficios del seguro de gastos médicos PMM Pyme de Mapfre para tus colaboradores.',
+                seccion: 'Mapfre'
+              })
+            }
             aria-label="Gastos médicos PMM Pyme de Mapfre: solicita información"
-            className="group block rounded-3xl overflow-hidden shadow-xl shadow-red-900/10 ring-1 ring-black/5"
+            className="group block w-full rounded-3xl overflow-hidden shadow-xl shadow-red-900/10 ring-1 ring-black/5"
           >
             <img
               src="/images/rosa.jpeg"
@@ -131,7 +141,7 @@ export const Mapfre = () => {
               loading="lazy"
               className="w-full aspect-[1080/595] object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
             />
-          </a>
+          </button>
         </Revelar>
 
         {/* Product Cards */}
