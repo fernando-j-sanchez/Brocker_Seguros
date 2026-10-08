@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Car, Home, Building2, Heart, Shield, Wifi, Globe, Database, Info, Truck, Send, CheckCircle, X, AlertCircle, MessageCircle } from 'lucide-react';
+import { Car, Home, Building2, Heart, Shield, Wifi, Globe, Database, Info, Truck, Send, CheckCircle, X, AlertCircle } from 'lucide-react';
 import { guardarLead } from '../lib/leads';
 import { whatsappUrl } from '../lib/contacto';
+import { Revelar, SUAVE } from './Revelar';
+import { WhatsAppIcon } from './Iconos';
 
 export const Mapfre = () => {
   const [formData, setFormData] = useState({
@@ -102,117 +104,48 @@ export const Mapfre = () => {
 
 
   return (
-    <section id="mapfre" className="py-16 px-4 bg-gray-50 dark:bg-gray-900 relative overflow-hidden">
-      {/* Elementos decorativos - CARRITOS ANIMADOS */}
-      <div className="absolute inset-0 pointer-events-none">
-        {[...Array(8)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute"
-            initial={{ 
-              x: Math.random() * window.innerWidth, 
-              y: Math.random() * window.innerHeight,
-              rotate: 0
-            }}
-            animate={{ 
-              y: [null, -300],
-              rotate: 360,
-              opacity: [0, 0.2, 0]
-            }}
-            transition={{
-              duration: 15 + Math.random() * 10,
-              repeat: Infinity,
-              delay: Math.random() * 5
-            }}
-          >
-            {i % 2 === 0 ? <Car className="w-8 h-8 text-red-400/20" /> : <Truck className="w-12 h-12 text-red-400/20" />}
-          </motion.div>
-        ))}
-      </div>
-
+    <section id="mapfre" className="py-20 px-4 bg-gray-50 dark:bg-gray-900 relative overflow-hidden">
       <div className="container mx-auto relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
-        >
-          <h2 className="text-3xl font-bold mb-4">
-            Mapfre <span className="text-red-600 dark:text-red-400">Protección integral</span>
+        <Revelar className="text-center mb-12">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-red-600 dark:text-red-400">Mapfre</p>
+          <h2 className="mt-3 text-3xl md:text-4xl font-extrabold tracking-tight">
+            Protección <span className="text-red-600 dark:text-red-400">integral</span>
           </h2>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          <p className="mt-4 text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             Desde autos y hogar hasta empresas y salud
           </p>
-        </motion.div>
+        </Revelar>
 
-        {/* Imagen Rosa Banner - MÁS PEQUEÑA */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          className="relative h-64 mb-12 rounded-2xl overflow-hidden shadow-2xl group max-w-4xl mx-auto"
-        >
-          <img 
-            src="/images/rosa.jpeg" 
-            alt="Mapfre Protección"
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-red-600/50 via-transparent to-red-600/50" />
-          
-          {/* Texto sobre la imagen */}
-          <motion.div 
-            className="absolute inset-0 flex items-center justify-center"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
+        {/* Banner de Mapfre: la imagen ya trae su propio texto, así que se muestra sin nada encima */}
+        <Revelar className="max-w-4xl mx-auto mb-14">
+          <a
+            href="#contacto"
+            aria-label="Gastos médicos PMM Pyme de Mapfre: solicita información"
+            className="group block rounded-3xl overflow-hidden shadow-xl shadow-red-900/10 ring-1 ring-black/5"
           >
-            <div className="text-center text-white">
-              <motion.h3 
-                className="text-4xl font-bold mb-4"
-                animate={{ textShadow: ['0 0 10px rgba(255,255,255,0.5)', '0 0 20px rgba(255,255,255,0.8)', '0 0 10px rgba(255,255,255,0.5)'] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                Protección Mapfre
-              </motion.h3>
-              <p className="text-xl">La tranquilidad que mereces</p>
-            </div>
-          </motion.div>
-        </motion.div>
+            <img
+              src="/images/rosa.jpeg"
+              alt="Mapfre: Protección médica a tu medida. Seguro de gastos médicos PMM Pyme."
+              width={1080}
+              height={595}
+              loading="lazy"
+              className="w-full aspect-[1080/595] object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+            />
+          </a>
+        </Revelar>
 
         {/* Product Cards */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {products.map((product, index) => (
-            <motion.div
-              key={product.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ scale: 1.02, y: -5 }}
-              className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all group relative overflow-hidden"
-            >
-              {/* Efecto de fondo */}
-              <motion.div 
-                className="absolute inset-0 bg-gradient-to-br from-red-500 to-red-600 opacity-0 group-hover:opacity-10 transition-opacity"
-                animate={{ 
-                  scale: [1, 1.2, 1],
-                  rotate: [0, 5, -5, 0]
-                }}
-                transition={{ duration: 3, repeat: Infinity }}
-              />
-              
-              <product.icon className="w-12 h-12 text-red-600 dark:text-red-400 mb-4 group-hover:scale-110 transition-transform relative z-10" />
-              <h3 className="text-lg font-bold mb-2 relative z-10">{product.title}</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 relative z-10">{product.desc}</p>
-              
-              {/* Animación de auto para flotilla */}
-              {product.title.includes('Autos') && (
-                <motion.div 
-                  className="absolute bottom-2 right-2 text-red-200"
-                  animate={{ x: [0, -10, 0] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  <Car className="w-8 h-8" />
-                </motion.div>
-              )}
-            </motion.div>
+            <Revelar key={product.title} retraso={index * 0.08}>
+              <div className="h-full bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md ring-1 ring-black/5 dark:ring-white/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group">
+                <div className="w-12 h-12 rounded-xl bg-red-50 dark:bg-red-900/30 flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110">
+                  <product.icon className="w-6 h-6 text-red-600 dark:text-red-400" />
+                </div>
+                <h3 className="text-lg font-bold mb-1">{product.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{product.desc}</p>
+              </div>
+            </Revelar>
           ))}
         </div>
 
@@ -222,14 +155,10 @@ export const Mapfre = () => {
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg relative overflow-hidden"
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.7, ease: SUAVE }}
+            className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-lg ring-1 ring-black/5 dark:ring-white/5 relative overflow-hidden"
           >
-            {/* Animación de fondo */}
-            <motion.div 
-              className="absolute inset-0 bg-gradient-to-r from-red-500/5 to-transparent"
-              animate={{ x: ['-100%', '100%'] }}
-              transition={{ duration: 5, repeat: Infinity }}
-            />
             
             <div className="relative z-10">
               <h3 className="text-2xl font-bold text-center mb-2">Datos de tu Flotilla</h3>
@@ -416,42 +345,51 @@ export const Mapfre = () => {
                 </motion.button>
               </form>
 
-              {/* Animación de autos dentro del formulario */}
-              <motion.div 
-                className="absolute -bottom-10 -left-10 text-red-200/30"
-                animate={{ x: [0, 20, 0] }}
-                transition={{ duration: 3, repeat: Infinity }}
-              >
-                <Truck className="w-20 h-20" />
-              </motion.div>
-              <motion.div 
-                className="absolute -top-10 -right-10 text-red-200/30"
-                animate={{ x: [0, -20, 0] }}
-                transition={{ duration: 4, repeat: Infinity }}
-              >
-                <Car className="w-16 h-16" />
-              </motion.div>
             </div>
           </motion.div>
 
           {/* Resultado de Cotización - Aparece al lado cuando showCotizacion es true */}
           <AnimatePresence mode="wait">
+            {!showCotizacion && (
+              <motion.div
+                key="beneficios"
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.7, ease: SUAVE }}
+                className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-red-600 via-red-600 to-rose-500 text-white p-8 lg:p-10 flex flex-col"
+              >
+                <div aria-hidden="true" className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-white/10 blur-2xl" />
+                <Truck aria-hidden="true" className="absolute -bottom-6 -right-6 w-48 h-48 text-white/10" />
+                <div className="relative">
+                  <span className="inline-block px-3 py-1 rounded-full bg-white/15 text-xs font-semibold uppercase tracking-wide">Flotillas Pyme</span>
+                  <h3 className="mt-4 text-3xl font-extrabold leading-tight">Asegura todos tus vehículos en una sola póliza</h3>
+                  <p className="mt-3 text-red-50/90">Desde 2 unidades. Llena el formulario y un asesor te envía tu cotización personalizada.</p>
+                  <ul className="mt-8 space-y-4">
+                    {[
+                      'Tarifa preferencial por flotilla',
+                      'Una sola renovación y un solo pago',
+                      'Asistencia vial 24/7 para todas tus unidades',
+                      'Coberturas Amplia, Limitada o Responsabilidad Civil'
+                    ].map((beneficio) => (
+                      <li key={beneficio} className="flex items-start gap-3">
+                        <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-white" />
+                        <span>{beneficio}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </motion.div>
+            )}
             {showCotizacion && (
               <motion.div
+                key="cotizacion"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg border-2 border-red-200 dark:border-red-800 relative overflow-hidden"
+                className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-lg border-2 border-red-200 dark:border-red-800 relative overflow-hidden"
               >
-                {/* Elementos decorativos en el resultado */}
-                <motion.div 
-                  className="absolute -bottom-10 -right-10 text-red-200/20"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity }}
-                >
-                  <Car className="w-32 h-32" />
-                </motion.div>
-
                 <div className="relative z-10">
                   <div className="flex justify-between items-start mb-4">
                     <h3 className="text-2xl font-bold">Tu Cotización - Flotilla</h3>
@@ -519,7 +457,7 @@ export const Mapfre = () => {
                     whileTap={{ scale: 0.98 }}
                     className="w-full py-4 bg-[#25D366] text-white rounded-xl font-semibold text-lg shadow-lg hover:bg-[#1ebe5b] transition-all flex items-center justify-center gap-2"
                   >
-                    <MessageCircle className="w-5 h-5" />
+                    <WhatsAppIcon className="w-5 h-5" />
                     {guardado ? 'Agilizar por WhatsApp' : 'Enviar por WhatsApp'}
                   </motion.a>
                 </div>
@@ -538,14 +476,9 @@ export const Mapfre = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.02 }}
-                className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border-l-4 border-red-500 relative overflow-hidden group"
+                viewport={{ once: true }}
+                className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md border-l-4 border-red-500 relative overflow-hidden group transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
               >
-                <motion.div 
-                  className="absolute inset-0 bg-gradient-to-r from-red-500/5 to-transparent"
-                  animate={{ x: ['-100%', '100%'] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                />
                 <product.icon className="w-8 h-8 text-red-600 dark:text-red-400 mb-3 relative z-10" />
                 <h4 className="font-bold mb-2 relative z-10">{product.title}</h4>
                 <p className="text-sm text-gray-600 dark:text-gray-400 relative z-10">{product.desc}</p>
@@ -564,8 +497,8 @@ export const Mapfre = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.02 }}
-                className="flex items-start space-x-3 p-4 bg-white dark:bg-gray-800 rounded-lg shadow group"
+                viewport={{ once: true }}
+                className="flex items-start space-x-3 p-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm ring-1 ring-black/5 dark:ring-white/5 group"
               >
                 <Info className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5 group-hover:rotate-12 transition-transform" />
                 <div>

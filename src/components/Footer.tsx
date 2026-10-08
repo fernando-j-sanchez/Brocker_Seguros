@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Phone, Mail, MapPin, Send, Facebook, Instagram, Linkedin, CheckCircle } from 'lucide-react';
+import { Phone, Mail, MapPin, Send, Facebook, Instagram, CheckCircle } from 'lucide-react';
 import { guardarLead } from '../lib/leads';
 
 export const Footer = () => {
@@ -89,28 +89,8 @@ export const Footer = () => {
 
   return (
     <footer id="contacto" className="bg-gray-900 text-white pt-16 pb-8 relative overflow-hidden">
-      {/* Elementos decorativos */}
-      <div className="absolute inset-0 pointer-events-none">
-        {[...Array(30)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-blue-400/20 rounded-full"
-            initial={{ 
-              x: Math.random() * window.innerWidth, 
-              y: Math.random() * window.innerHeight 
-            }}
-            animate={{ 
-              y: [null, -100],
-              opacity: [0, 0.5, 0]
-            }}
-            transition={{
-              duration: 3 + Math.random() * 2,
-              repeat: Infinity,
-              delay: Math.random() * 2
-            }}
-          />
-        ))}
-      </div>
+      {/* Brillo de fondo */}
+      <div aria-hidden="true" className="absolute -top-40 left-1/2 -translate-x-1/2 w-[48rem] h-80 rounded-full bg-blue-600/20 blur-3xl pointer-events-none" />
 
       <motion.div 
         className="container mx-auto px-4 relative z-10"
@@ -160,8 +140,7 @@ export const Footer = () => {
               <div className="flex space-x-4">
                 {[
                   { icon: Facebook, href: 'https://www.facebook.com/profile.php?id=61588330452594', color: 'bg-blue-600' },
-                  { icon: Instagram, href: 'https://www.instagram.com/NISSI_seguros?igsh=ODJwcnYzNGl3ZXNk', color: 'bg-pink-600' },
-                  { icon: Linkedin, href: '#', color: 'bg-blue-700' }
+                  { icon: Instagram, href: 'https://www.instagram.com/NISSI_seguros?igsh=ODJwcnYzNGl3ZXNk', color: 'bg-pink-600' }
                 ].map((social, i) => (
                   <motion.a
                     key={i}
@@ -300,16 +279,6 @@ export const Footer = () => {
                   )}
                 </span>
                 
-                {/* Animación de envío */}
-                {!isSubmitting && (
-                  <motion.div 
-                    className="absolute inset-0 bg-white/20"
-                    animate={{ 
-                      x: ['-100%', '100%'],
-                    }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  />
-                )}
               </motion.button>
             </form>
 
