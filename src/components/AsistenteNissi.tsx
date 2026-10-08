@@ -169,7 +169,9 @@ export const AsistenteNissi = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         // El saludo inicial no se envía: la IA ya conoce su papel por sus instrucciones.
-        body: JSON.stringify({ messages: historial.slice(1) })
+        body: JSON.stringify({ messages: historial.slice(1) }),
+        // Nunca dejar al cliente esperando: si tarda más de 30 s se usa la respuesta de respaldo.
+        signal: AbortSignal.timeout(30000)
       });
       const data = await res.json();
       if (!res.ok || !data.reply) throw new Error(data.error || `Error ${res.status}`);

@@ -28,3 +28,10 @@ export const esLimiteOSaturacion = (status) => status === 429 || status === 500 
 // Vale la pena intentar con otro modelo. Una clave inválida (400/403) fallaría igual con todos.
 export const convieneProbarOtroModelo = (status, datos) =>
   esModeloNoDisponible(status, datos) || esLimiteOSaturacion(status);
+
+// Tiempos máximos: si Google no contesta a tiempo se pasa al siguiente modelo,
+// y la respuesta completa nunca tarda más que TIEMPO_TOTAL_MS.
+export const TIEMPO_POR_MODELO_MS = 12000;
+export const TIEMPO_TOTAL_MS = 25000;
+
+export const esTiempoAgotado = (error) => error?.name === 'TimeoutError' || error?.name === 'AbortError';

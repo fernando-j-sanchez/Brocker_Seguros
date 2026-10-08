@@ -42,6 +42,7 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...lead, token: process.env.GOOGLE_SHEETS_TOKEN || '' }),
+      signal: AbortSignal.timeout(20000),
     });
     const datos = await respuesta.json().catch(() => ({}));
     if (!respuesta.ok || datos.ok === false) {
